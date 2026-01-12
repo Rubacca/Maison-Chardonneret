@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Container } from "@/components/layout/Container";
-import { Calendar, Users, Home } from "lucide-react";
+import { Calendar, Users, Home, Loader2, AlertTriangle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 // Extend Window interface for Recranet config
 declare global {
@@ -12,31 +13,108 @@ declare global {
       organization: number;
       locale: string;
       currency: string;
+      googleApiKey?: string;
     };
   }
 }
 
-const BookingPage = () => {
-  const [currentLang, setCurrentLang] = useState<"nl" | "fr">("nl");
+type SDKStatus = "loading" | "loaded" | "error" | "timeout";
 
-  // Update Recranet locale when language changes
-  useEffect(() => {
-    if (window.recranetConfig) {
-      window.recranetConfig.locale = currentLang;
-    }
-    
-    // Update the SDK script source for the new language with cache-busting
+const BookingPage = () => {
+  const [currentLang, setCurrentLang] = useState<"nl" | "fr">(() => {
+    // Check URL for language param on initial load
+    const params = new URLSearchParams(window.location.search);
+    const langParam = params.get("lang");
+    return langParam === "fr" ? "fr" : "nl";
+  });
+  
+  const [sdkStatus, setSdkStatus] = useState<SDKStatus>("loading");
+  const [sdkError, setSdkError] = useState<string | null>(null);
+
+  // Load Recranet SDK dynamically
+  const loadRecranetSDK = useCallback((lang: "nl" | "fr") => {
+    setSdkStatus("loading");
+    setSdkError(null);
+
+    // Set up Recranet config
+    window.recranetConfig = {
+      organization: 1640,
+      locale: lang,
+      currency: "EUR",
+    };
+
+    console.log("[Recranet] Config set:", window.recranetConfig);
+
+    // Remove any existing SDK script
     const existingScript = document.querySelector(
       'script[src*="static.recranet.com/elements"]'
     );
     if (existingScript) {
-      const timestamp = Date.now();
-      const newSrc = `https://static.recranet.com/elements/${currentLang}/sdk.js?v=${timestamp}`;
-      if (!existingScript.getAttribute('src')?.includes(`/${currentLang}/`)) {
-        existingScript.setAttribute('src', newSrc);
-      }
+      existingScript.remove();
+      console.log("[Recranet] Removed existing SDK script");
     }
-  }, [currentLang]);
+
+    // Create and load new SDK script
+    const script = document.createElement("script");
+    const timestamp = Date.now();
+    script.src = `https://static.recranet.com/elements/${lang}/sdk.js?v=${timestamp}`;
+    script.async = true;
+
+    script.onload = () => {
+      console.log("[Recranet] SDK script loaded successfully");
+      
+      // Check if custom element is defined
+      const checkElement = () => {
+        const isDefined = customElements.get("recranet-accommodations");
+        if (isDefined) {
+          console.log("[Recranet] Custom element 'recranet-accommodations' is defined");
+          setSdkStatus("loaded");
+        } else {
+          console.log("[Recranet] Waiting for custom element to be defined...");
+          setTimeout(checkElement, 100);
+        }
+      };
+      
+      // Start checking after a small delay
+      setTimeout(checkElement, 200);
+    };
+
+    script.onerror = (e) => {
+      console.error("[Recranet] SDK script failed to load:", e);
+      setSdkStatus("error");
+      setSdkError("Failed to load booking system. Please refresh the page.");
+    };
+
+    document.body.appendChild(script);
+    console.log("[Recranet] SDK script injected:", script.src);
+
+    // Timeout fallback
+    const timeout = setTimeout(() => {
+      if (sdkStatus === "loading") {
+        console.warn("[Recranet] SDK loading timed out after 15 seconds");
+        setSdkStatus("timeout");
+        setSdkError("Booking system is taking longer than expected to load.");
+      }
+    }, 15000);
+
+    return () => clearTimeout(timeout);
+  }, [sdkStatus]);
+
+  // Load SDK on mount
+  useEffect(() => {
+    const cleanup = loadRecranetSDK(currentLang);
+    return cleanup;
+  }, []); // Only on mount
+
+  // Handle language change with page reload for SDK
+  const handleLangChange = (newLang: "nl" | "fr") => {
+    if (newLang !== currentLang) {
+      // Update URL and reload to ensure correct SDK language
+      const url = new URL(window.location.href);
+      url.searchParams.set("lang", newLang);
+      window.location.href = url.toString();
+    }
+  };
 
   const content = {
     nl: {
@@ -51,7 +129,10 @@ const BookingPage = () => {
       weekendMidweek: "Weekend of midweek",
       helpText: "Heeft u vragen over uw reservering? Neem gerust",
       contact: "contact",
-      withUs: "met ons op."
+      withUs: "met ons op.",
+      loading: "Beschikbaarheid laden...",
+      error: "Er is een probleem opgetreden",
+      retry: "Probeer opnieuw"
     },
     fr: {
       tagline: "Réservation",
@@ -65,7 +146,10 @@ const BookingPage = () => {
       weekendMidweek: "Week-end ou mi-semaine",
       helpText: "Avez-vous des questions sur votre réservation? N'hésitez pas à",
       contact: "nous contacter",
-      withUs: "."
+      withUs: ".",
+      loading: "Chargement des disponibilités...",
+      error: "Un problème est survenu",
+      retry: "Réessayer"
     }
   };
 
@@ -73,7 +157,7 @@ const BookingPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar currentLang={currentLang} onLangChange={setCurrentLang} />
+      <Navbar currentLang={currentLang} onLangChange={handleLangChange} />
       
       {/* Hero Banner */}
       <section className="pt-20 md:pt-24 pb-12 bg-brand-dark">
@@ -141,11 +225,38 @@ const BookingPage = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="bg-card rounded-md shadow-xl border border-border overflow-hidden"
           >
-            {/* Recranet Accommodations Element */}
-            <div 
-              className="min-h-[600px]"
-              dangerouslySetInnerHTML={{ __html: '<recranet-accommodations class="recranet-element"></recranet-accommodations>' }}
-            />
+            {/* Loading State */}
+            {sdkStatus === "loading" && (
+              <div className="min-h-[600px] flex flex-col items-center justify-center gap-4 p-8">
+                <Loader2 className="w-12 h-12 text-brand-sage animate-spin" />
+                <p className="font-sans text-muted-foreground">{t.loading}</p>
+              </div>
+            )}
+
+            {/* Error State */}
+            {(sdkStatus === "error" || sdkStatus === "timeout") && (
+              <div className="min-h-[600px] flex flex-col items-center justify-center gap-4 p-8">
+                <Alert variant="destructive" className="max-w-md">
+                  <AlertTriangle className="h-4 w-4" />
+                  <AlertDescription>
+                    {sdkError || t.error}
+                  </AlertDescription>
+                </Alert>
+                <button
+                  onClick={() => loadRecranetSDK(currentLang)}
+                  className="mt-4 px-6 py-2 bg-brand-sage text-white rounded-md hover:bg-brand-sage/90 transition-colors font-sans text-sm"
+                >
+                  {t.retry}
+                </button>
+              </div>
+            )}
+
+            {/* Recranet Accommodations Element - Only render when SDK is loaded */}
+            {sdkStatus === "loaded" && (
+              <div className="min-h-[600px]">
+                <recranet-accommodations class="recranet-element"></recranet-accommodations>
+              </div>
+            )}
           </motion.div>
 
           {/* Help Text */}
@@ -164,7 +275,7 @@ const BookingPage = () => {
         </Container>
       </section>
 
-      <Footer currentLang={currentLang} onLangChange={setCurrentLang} />
+      <Footer currentLang={currentLang} onLangChange={handleLangChange} />
     </div>
   );
 };
