@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { IntroSection } from "@/components/sections/IntroSection";
 import { SocialProofSection } from "@/components/sections/SocialProofSection";
@@ -19,6 +20,7 @@ const Index = () => {
       <FeatureCardsSection />
       <USPSection />
       <LocationSection />
+      <Footer currentLang={currentLang} onLangChange={setCurrentLang} />
     </div>
   );
 };
