@@ -25,13 +25,14 @@ const BookingPage = () => {
       window.recranetConfig.locale = currentLang;
     }
     
-    // Update the SDK script source for the new language
+    // Update the SDK script source for the new language with cache-busting
     const existingScript = document.querySelector(
       'script[src*="static.recranet.com/elements"]'
     );
     if (existingScript) {
-      const newSrc = `https://static.recranet.com/elements/${currentLang}/sdk.js`;
-      if (existingScript.getAttribute('src') !== newSrc) {
+      const timestamp = Date.now();
+      const newSrc = `https://static.recranet.com/elements/${currentLang}/sdk.js?v=${timestamp}`;
+      if (!existingScript.getAttribute('src')?.includes(`/${currentLang}/`)) {
         existingScript.setAttribute('src', newSrc);
       }
     }
@@ -143,7 +144,7 @@ const BookingPage = () => {
             {/* Recranet Accommodations Element */}
             <div 
               className="min-h-[600px]"
-              dangerouslySetInnerHTML={{ __html: '<recranet-accommodations></recranet-accommodations>' }}
+              dangerouslySetInnerHTML={{ __html: '<recranet-accommodations class="recranet-element"></recranet-accommodations>' }}
             />
           </motion.div>
 
