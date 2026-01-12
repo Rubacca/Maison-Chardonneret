@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import { HeroSection } from "@/components/sections/HeroSection";
+import { IntroSection } from "@/components/sections/IntroSection";
+import { SocialProofSection } from "@/components/sections/SocialProofSection";
+import { FeatureCardsSection } from "@/components/sections/FeatureCardsSection";
+import { USPSection } from "@/components/sections/USPSection";
+import { LocationSection } from "@/components/sections/LocationSection";
 
 const Index = () => {
   const [currentLang, setCurrentLang] = useState<"nl" | "fr">("nl");
@@ -9,15 +14,11 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Navbar currentLang={currentLang} onLangChange={setCurrentLang} />
       <HeroSection />
-      
-      {/* Placeholder for next sections */}
-      <section className="py-32 bg-background">
-        <div className="text-center">
-          <p className="text-muted-foreground">
-            ✓ Phase 2 Complete: Navbar + Hero Section
-          </p>
-        </div>
-      </section>
+      <IntroSection />
+      <SocialProofSection />
+      <FeatureCardsSection />
+      <USPSection />
+      <LocationSection />
     </div>
   );
 };
