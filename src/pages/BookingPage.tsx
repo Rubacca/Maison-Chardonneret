@@ -64,43 +64,24 @@ const BookingPage = () => {
     script.src = `https://static.recranet.com/elements/${lang}/sdk.js?v=${timestamp}`;
     script.async = true;
 
-    script.onload = async () => {
+    script.onload = () => {
       console.log("[Recranet] SDK script loaded successfully");
+      window.clearTimeout(timeoutId);
       setSdkStatus("loaded");
-
-      // Wait for the custom element to be defined (if the SDK defines it)
-      const elementName = "recranet-accommodations";
-      try {
-        if (customElements?.whenDefined) {
-          await Promise.race([
-            customElements.whenDefined(elementName),
-            new Promise((_, reject) =>
-              window.setTimeout(
-                () => reject(new Error("whenDefined timeout")),
-                8000
-              )
-            ),
-          ]);
-          console.log(`[Recranet] Custom element '${elementName}' is defined`);
-        } else {
-          console.log(
-            "[Recranet] customElements.whenDefined not available; proceeding anyway"
-          );
-        }
-
+      
+      // Give the SDK a moment to initialize, then show widget area
+      // The SDK may register elements lazily or on-demand
+      window.setTimeout(() => {
+        const elementName = "recranet-accommodations";
+        const isDefined = customElements.get(elementName);
+        console.log(`[Recranet] Custom element '${elementName}' defined:`, !!isDefined);
+        
+        // List all registered Recranet elements for debugging
+        const allElements = document.querySelectorAll('[class*="recranet"]');
+        console.log("[Recranet] Elements in DOM:", allElements.length);
+        
         setWidgetReady(true);
-        window.clearTimeout(timeoutId);
-      } catch (e) {
-        console.error(
-          "[Recranet] SDK loaded but custom element was not defined:",
-          e
-        );
-        setSdkStatus("error");
-        setSdkError(
-          "Booking system loaded, but the widget did not initialize. Please check console for errors."
-        );
-        window.clearTimeout(timeoutId);
-      }
+      }, 2000);
     };
 
     script.onerror = (e) => {
