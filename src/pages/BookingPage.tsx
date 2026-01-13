@@ -30,29 +30,44 @@ const BookingPage = () => {
   
   const [sdkStatus, setSdkStatus] = useState<SDKStatus>("loading");
   const [sdkError, setSdkError] = useState<string | null>(null);
+  const [widgetReady, setWidgetReady] = useState(false);
 
   // Load Recranet SDK dynamically
   const loadRecranetSDK = useCallback((lang: "nl" | "fr") => {
     setSdkStatus("loading");
     setSdkError(null);
+    setWidgetReady(false);
+
+    const googleApiKey = (import.meta as any).env?.VITE_GOOGLE_MAPS_API_KEY as
+      | string
+      | undefined;
 
     // Set up Recranet config
     window.recranetConfig = {
       organization: 1640,
       locale: lang,
       currency: "EUR",
+      googleApiKey,
     };
 
     console.log("[Recranet] Config set:", window.recranetConfig);
-
-    // Remove any existing SDK script
-    const existingScript = document.querySelector(
-      'script[src*="static.recranet.com/elements"]'
-    );
-    if (existingScript) {
-      existingScript.remove();
-      console.log("[Recranet] Removed existing SDK script");
+    if (!googleApiKey) {
+      console.warn(
+        "[Recranet] Missing VITE_GOOGLE_MAPS_API_KEY. Recranet may fail silently if Google Maps is required."
+      );
     }
+
+    // Remove any existing SDK script(s)
+    document
+      .querySelectorAll('script[src*="static.recranet.com/elements"]')
+      .forEach((s) => s.remove());
+
+    // Timeout fallback
+    const timeoutId = window.setTimeout(() => {
+      console.warn("[Recranet] SDK loading timed out after 15 seconds");
+      setSdkStatus("timeout");
+      setSdkError("Booking system is taking longer than expected to load.");
+    }, 15000);
 
     // Create and load new SDK script
     const script = document.createElement("script");
@@ -60,45 +75,59 @@ const BookingPage = () => {
     script.src = `https://static.recranet.com/elements/${lang}/sdk.js?v=${timestamp}`;
     script.async = true;
 
-    script.onload = () => {
+    script.onload = async () => {
       console.log("[Recranet] SDK script loaded successfully");
-      
-      // Check if custom element is defined
-      const checkElement = () => {
-        const isDefined = customElements.get("recranet-accommodations");
-        if (isDefined) {
-          console.log("[Recranet] Custom element 'recranet-accommodations' is defined");
-          setSdkStatus("loaded");
+      setSdkStatus("loaded");
+
+      // Wait for the custom element to be defined (if the SDK defines it)
+      const elementName = "recranet-accommodations";
+      try {
+        if (customElements?.whenDefined) {
+          await Promise.race([
+            customElements.whenDefined(elementName),
+            new Promise((_, reject) =>
+              window.setTimeout(
+                () => reject(new Error("whenDefined timeout")),
+                8000
+              )
+            ),
+          ]);
+          console.log(`[Recranet] Custom element '${elementName}' is defined`);
         } else {
-          console.log("[Recranet] Waiting for custom element to be defined...");
-          setTimeout(checkElement, 100);
+          console.log(
+            "[Recranet] customElements.whenDefined not available; proceeding anyway"
+          );
         }
-      };
-      
-      // Start checking after a small delay
-      setTimeout(checkElement, 200);
+
+        setWidgetReady(true);
+        window.clearTimeout(timeoutId);
+      } catch (e) {
+        console.error(
+          "[Recranet] SDK loaded but custom element was not defined:",
+          e
+        );
+        setSdkStatus("error");
+        setSdkError(
+          "Booking system loaded, but the widget did not initialize. (Check Google Maps API key / console errors.)"
+        );
+        window.clearTimeout(timeoutId);
+      }
     };
 
     script.onerror = (e) => {
       console.error("[Recranet] SDK script failed to load:", e);
       setSdkStatus("error");
       setSdkError("Failed to load booking system. Please refresh the page.");
+      window.clearTimeout(timeoutId);
     };
 
     document.body.appendChild(script);
     console.log("[Recranet] SDK script injected:", script.src);
 
-    // Timeout fallback
-    const timeout = setTimeout(() => {
-      if (sdkStatus === "loading") {
-        console.warn("[Recranet] SDK loading timed out after 15 seconds");
-        setSdkStatus("timeout");
-        setSdkError("Booking system is taking longer than expected to load.");
-      }
-    }, 15000);
-
-    return () => clearTimeout(timeout);
-  }, [sdkStatus]);
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, []);
 
   // Load SDK on mount
   useEffect(() => {
@@ -225,38 +254,34 @@ const BookingPage = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="bg-card rounded-md shadow-xl border border-border overflow-hidden"
           >
-            {/* Loading State */}
-            {sdkStatus === "loading" && (
-              <div className="min-h-[600px] flex flex-col items-center justify-center gap-4 p-8">
-                <Loader2 className="w-12 h-12 text-brand-sage animate-spin" />
-                <p className="font-sans text-muted-foreground">{t.loading}</p>
-              </div>
-            )}
+            <div className="relative min-h-[600px]">
+              {/* Recranet element should exist in the DOM while the SDK initializes */}
+              <recranet-accommodations className="recranet-element" />
 
-            {/* Error State */}
-            {(sdkStatus === "error" || sdkStatus === "timeout") && (
-              <div className="min-h-[600px] flex flex-col items-center justify-center gap-4 p-8">
-                <Alert variant="destructive" className="max-w-md">
-                  <AlertTriangle className="h-4 w-4" />
-                  <AlertDescription>
-                    {sdkError || t.error}
-                  </AlertDescription>
-                </Alert>
-                <button
-                  onClick={() => loadRecranetSDK(currentLang)}
-                  className="mt-4 px-6 py-2 bg-brand-sage text-white rounded-md hover:bg-brand-sage/90 transition-colors font-sans text-sm"
-                >
-                  {t.retry}
-                </button>
-              </div>
-            )}
+              {/* Loading overlay */}
+              {!widgetReady && sdkStatus !== "error" && sdkStatus !== "timeout" && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8 bg-background/80">
+                  <Loader2 className="w-12 h-12 text-brand-sage animate-spin" />
+                  <p className="font-sans text-muted-foreground">{t.loading}</p>
+                </div>
+              )}
 
-            {/* Recranet Accommodations Element - Only render when SDK is loaded */}
-            {sdkStatus === "loaded" && (
-              <div className="min-h-[600px]">
-                <recranet-accommodations class="recranet-element"></recranet-accommodations>
-              </div>
-            )}
+              {/* Error overlay */}
+              {(sdkStatus === "error" || sdkStatus === "timeout") && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8 bg-background/80">
+                  <Alert variant="destructive" className="max-w-md">
+                    <AlertTriangle className="h-4 w-4" />
+                    <AlertDescription>{sdkError || t.error}</AlertDescription>
+                  </Alert>
+                  <button
+                    onClick={() => loadRecranetSDK(currentLang)}
+                    className="mt-4 px-6 py-2 bg-brand-sage text-white rounded-md hover:bg-brand-sage/90 transition-colors font-sans text-sm"
+                  >
+                    {t.retry}
+                  </button>
+                </div>
+              )}
+            </div>
           </motion.div>
 
           {/* Help Text */}
