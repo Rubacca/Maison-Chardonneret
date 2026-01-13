@@ -311,15 +311,117 @@
         text-align: center;
       }
       
-      /* Recranet Widget - Root element styling (theming only, no layout overrides) */
+      /* Recranet Widget - Root element styling */
       recranet-accommodations {
         display: block;
         width: 100%;
         min-height: 600px;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        padding: 1.5rem;
       }
       
-      /* Theme colors via CSS variables - no layout forcing */
+      /* Force horizontal top search bar */
+      recranet-accommodations .search-bar-sticky,
+      recranet-accommodations [class*="search-bar"],
+      recranet-accommodations .recranet-search-form,
+      recranet-accommodations form.ng-untouched,
+      recranet-accommodations form.ng-pristine {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        align-items: flex-end !important;
+        gap: 1rem !important;
+        padding: 1.5rem !important;
+        background: #f8f7f5 !important;
+        border-radius: 0.5rem !important;
+        margin-bottom: 1.5rem !important;
+      }
+      
+      recranet-accommodations .search-bar-sticky > *,
+      recranet-accommodations [class*="search-bar"] > *,
+      recranet-accommodations form mat-form-field {
+        flex: 1 1 180px !important;
+        min-width: 150px !important;
+      }
+      
+      recranet-accommodations [class*="search-bar"] button,
+      recranet-accommodations form button[type="submit"] {
+        flex: 0 0 auto !important;
+        min-width: 120px !important;
+      }
+      
+      /* Main layout: sidebar + content grid */
+      recranet-accommodations .accommodation-list,
+      recranet-accommodations [class*="accommodation-list"],
+      recranet-accommodations .results-container,
+      recranet-accommodations [class*="results"] {
+        display: grid !important;
+        grid-template-columns: 280px 1fr !important;
+        gap: 2rem !important;
+        align-items: start !important;
+      }
+      
+      /* Filters sidebar */
+      recranet-accommodations .filters,
+      recranet-accommodations [class*="filter"],
+      recranet-accommodations .sidebar {
+        background: #f8f7f5 !important;
+        padding: 1.5rem !important;
+        border-radius: 0.5rem !important;
+        position: sticky !important;
+        top: 6rem !important;
+      }
+      
+      /* Accommodation card: 3-column horizontal layout */
+      recranet-accommodations .accommodation-card,
+      recranet-accommodations [class*="accommodation-card"],
+      recranet-accommodations .accommodation-item,
+      recranet-accommodations [class*="accommodation-item"] {
+        display: grid !important;
+        grid-template-columns: 240px 1fr auto !important;
+        gap: 1.5rem !important;
+        align-items: start !important;
+        background: white !important;
+        border: 1px solid var(--recranet-border) !important;
+        border-radius: 0.5rem !important;
+        overflow: hidden !important;
+        margin-bottom: 1rem !important;
+        padding: 0 !important;
+      }
+      
+      /* Image container: proper aspect ratio */
+      recranet-accommodations .accommodation-card img,
+      recranet-accommodations [class*="accommodation-card"] img,
+      recranet-accommodations .accommodation-item img,
+      recranet-accommodations [class*="accommodation-item"] img {
+        width: 240px !important;
+        height: 180px !important;
+        object-fit: cover !important;
+        border-radius: 0 !important;
+        margin: 0 !important;
+      }
+      
+      /* Details section */
+      recranet-accommodations .accommodation-card .details,
+      recranet-accommodations [class*="accommodation-card"] [class*="details"],
+      recranet-accommodations [class*="accommodation-card"] [class*="content"] {
+        padding: 1.25rem 0 !important;
+      }
+      
+      /* Price section styling */
+      recranet-accommodations [class*="price"],
+      recranet-accommodations .price-section,
+      recranet-accommodations [class*="booking"] {
+        text-align: right !important;
+        padding: 1.25rem !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-end !important;
+        justify-content: space-between !important;
+        min-height: 100% !important;
+      }
+      
+      /* Theme colors via CSS variables */
       recranet-accommodations,
       recranet-search-bar,
       recranet-basket,
