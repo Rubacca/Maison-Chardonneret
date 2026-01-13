@@ -17,37 +17,19 @@
     <meta name="twitter:site" content="@MaisonChardonneret" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
 
-    <!-- Recranet SDK Configuration - MUST be defined before SDK loads -->
+    <!-- Recranet SDK Configuration -->
     <script>
-      (function() {
-        // Only configure and load Recranet SDK on booking pages
-        var isBookingPage = window.location.pathname.indexOf('/boeken') === 0;
-        
-        if (isBookingPage) {
-          // Read language from URL or default to 'nl'
-          var params = new URLSearchParams(window.location.search);
-          var lang = params.get('lang') === 'fr' ? 'fr' : 'nl';
-          
-          // Set base href for Recranet routing (required by their SDK)
-          var baseEl = document.querySelector('base');
-          if (baseEl) {
-            baseEl.setAttribute('href', '/boeken/');
-          }
-          
-          window.recranetConfig = {
-            organization: 1640,
-            locale: lang,
-            currency: 'EUR'
-          };
-          
-          // Dynamically load the correct SDK based on language
-          var script = document.createElement('script');
-          script.src = 'https://static.recranet.com/elements/' + lang + '/sdk.js';
-          script.async = false; // Load synchronously to ensure it's ready before DOM
-          document.head.appendChild(script);
-        }
-      })();
+      // Set Recranet config globally - SDK will read this on load
+      var params = new URLSearchParams(window.location.search);
+      var lang = params.get('lang') === 'fr' ? 'fr' : 'nl';
+      window.recranetConfig = {
+        organization: 1640,
+        locale: lang,
+        currency: 'EUR'
+      };
     </script>
+    <!-- Recranet SDK - Dutch version (handles both locales via config) -->
+    <script id="recranet-sdk" src="https://static.recranet.com/elements/nl/sdk.js"></script>
 
     <!-- Google Fonts: Playfair Display + Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

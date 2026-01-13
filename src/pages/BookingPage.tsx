@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Container } from "@/components/layout/Container";
-import { Calendar, Users, Home } from "lucide-react";
+import { Calendar, Users, Home, Loader2 } from "lucide-react";
 
 // Extend Window interface for Recranet config
 declare global {
@@ -22,6 +22,32 @@ const BookingPage = () => {
     const langParam = params.get("lang");
     return langParam === "fr" ? "fr" : "nl";
   });
+  
+  const [widgetLoaded, setWidgetLoaded] = useState(false);
+
+  // Check if the Recranet custom element is defined
+  useEffect(() => {
+    const checkWidget = () => {
+      const isDefined = customElements.get('recranet-accommodations');
+      if (isDefined) {
+        setWidgetLoaded(true);
+      }
+    };
+    
+    // Check immediately and then periodically
+    checkWidget();
+    const interval = setInterval(checkWidget, 500);
+    
+    // Stop checking after 10 seconds
+    const timeout = setTimeout(() => {
+      clearInterval(interval);
+    }, 10000);
+    
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, []);
 
   // Handle language change with page reload for SDK
   const handleLangChange = (newLang: "nl" | "fr") => {
@@ -45,7 +71,10 @@ const BookingPage = () => {
       weekendMidweek: "Weekend of midweek",
       helpText: "Heeft u vragen over uw reservering? Neem gerust",
       contact: "contact",
-      withUs: "met ons op."
+      withUs: "met ons op.",
+      loading: "Beschikbaarheid laden...",
+      directBooking: "Of boek direct via ons reserveringsportaal:",
+      bookNow: "Direct boeken"
     },
     fr: {
       tagline: "Réservation",
@@ -59,11 +88,17 @@ const BookingPage = () => {
       weekendMidweek: "Week-end ou mi-semaine",
       helpText: "Avez-vous des questions sur votre réservation? N'hésitez pas à",
       contact: "nous contacter",
-      withUs: "."
+      withUs: ".",
+      loading: "Chargement des disponibilités...",
+      directBooking: "Ou réservez directement via notre portail de réservation:",
+      bookNow: "Réserver maintenant"
     }
   };
 
   const t = content[currentLang];
+
+  // Recranet portal URL for direct booking fallback
+  const recranetPortalUrl = `https://maison-chardonneret-elegant.recranet.com/${currentLang}/accommodations`;
 
   return (
     <div className="min-h-screen bg-background">
@@ -135,17 +170,46 @@ const BookingPage = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="bg-card rounded-md shadow-xl border border-border overflow-hidden"
           >
-            <div className="min-h-[600px]">
+            <div className="relative min-h-[600px]">
               {/* Recranet widget - SDK is loaded statically from index.html */}
               <recranet-accommodations className="recranet-element" />
+              
+              {/* Loading indicator while widget initializes */}
+              {!widgetLoaded && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8 bg-background/90 pointer-events-none">
+                  <Loader2 className="w-10 h-10 text-brand-sage animate-spin" />
+                  <p className="font-sans text-muted-foreground">{t.loading}</p>
+                </div>
+              )}
             </div>
+          </motion.div>
+
+          {/* Fallback direct booking link */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="text-center mt-8 p-6 bg-muted rounded-lg border border-border"
+          >
+            <p className="font-sans text-sm text-muted-foreground mb-4">
+              {t.directBooking}
+            </p>
+            <a
+              href={recranetPortalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-brand-sage text-white rounded-md hover:bg-brand-sage/90 transition-colors font-sans text-sm font-medium"
+            >
+              <Calendar size={18} />
+              {t.bookNow}
+            </a>
           </motion.div>
 
           {/* Help Text */}
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
+            transition={{ delay: 0.6 }}
             className="text-center font-sans text-sm text-muted-foreground mt-6"
           >
             {t.helpText}{" "}
