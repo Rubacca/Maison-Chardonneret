@@ -17,20 +17,6 @@
     <meta name="twitter:site" content="@MaisonChardonneret" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
 
-    <!-- Recranet SDK Configuration -->
-    <script>
-      // Set Recranet config globally - SDK will read this on load
-      var params = new URLSearchParams(window.location.search);
-      var lang = params.get('lang') === 'fr' ? 'fr' : 'nl';
-      window.recranetConfig = {
-        organization: 1640,
-        locale: lang,
-        currency: 'EUR'
-      };
-    </script>
-    <!-- Recranet SDK - Dutch version (handles both locales via config) -->
-    <script id="recranet-sdk" src="https://static.recranet.com/elements/nl/sdk.js"></script>
-
     <!-- Google Fonts: Playfair Display + Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

@@ -84,9 +84,9 @@ export const Navbar = ({ currentLang, onLangChange }: NavbarProps) => {
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
               link.href.startsWith("/") ? (
-                <Link
+                <a
                   key={link.href}
-                  to={link.href}
+                  href={link.href}
                   className={`font-sans text-sm transition-colors relative group ${
                     isScrolled || !isHomePage
                       ? "text-foreground/80 hover:text-foreground"
@@ -95,7 +95,7 @@ export const Navbar = ({ currentLang, onLangChange }: NavbarProps) => {
                 >
                   {link.label}
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-sage group-hover:w-full transition-all duration-300" />
-                </Link>
+                </a>
               ) : (
                 <a
                   key={link.href}
@@ -150,11 +150,11 @@ export const Navbar = ({ currentLang, onLangChange }: NavbarProps) => {
               </button>
             </div>
 
-            <Link to="/boeken">
+            <a href="/boeken/">
               <AnimatedButton variant="secondary" size="sm">
                 Reserveren
               </AnimatedButton>
-            </Link>
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -184,13 +184,13 @@ export const Navbar = ({ currentLang, onLangChange }: NavbarProps) => {
               <div className="py-6 space-y-4">
                 {navLinks.map((link) => (
                   link.href.startsWith("/") ? (
-                    <Link
+                    <a
                       key={link.href}
-                      to={link.href}
+                      href={link.href}
                       className="block font-sans text-foreground/80 hover:text-foreground py-2 text-lg"
                     >
                       {link.label}
-                    </Link>
+                    </a>
                   ) : (
                     <a
                       key={link.href}
@@ -224,11 +224,11 @@ export const Navbar = ({ currentLang, onLangChange }: NavbarProps) => {
                   </button>
                 </div>
 
-                <Link to="/boeken" className="block">
+                <a href="/boeken/" className="block">
                   <AnimatedButton variant="secondary" size="md" className="w-full">
                     Reserveren
                   </AnimatedButton>
-                </Link>
+                </a>
               </div>
             </Container>
           </motion.div>
