@@ -37,6 +37,19 @@ const BookingPage = () => {
     setSdkError(null);
     setWidgetReady(false);
 
+    // Recranet SDK requires base href to be set to the booking page path
+    // Dynamically update the base href for this page
+    let baseEl = document.querySelector('base');
+    const originalBaseHref = baseEl?.getAttribute('href') || '/';
+    if (baseEl) {
+      baseEl.setAttribute('href', '/boeken');
+    } else {
+      baseEl = document.createElement('base');
+      baseEl.setAttribute('href', '/boeken');
+      document.head.prepend(baseEl);
+    }
+    console.log("[Recranet] Base href set to /boeken");
+
     // Set up Recranet config
     window.recranetConfig = {
       organization: 1640,
@@ -76,9 +89,21 @@ const BookingPage = () => {
         const isDefined = customElements.get(elementName);
         console.log(`[Recranet] Custom element '${elementName}' defined:`, !!isDefined);
         
-        // List all registered Recranet elements for debugging
-        const allElements = document.querySelectorAll('[class*="recranet"]');
-        console.log("[Recranet] Elements in DOM:", allElements.length);
+        // Inject styles into Recranet shadow DOM if accessible
+        const recranetEl = document.querySelector('recranet-accommodations');
+        if (recranetEl?.shadowRoot) {
+          const style = document.createElement('style');
+          style.textContent = `
+            * { color: #3A3A3A !important; -webkit-text-fill-color: #3A3A3A !important; }
+            input, select, textarea { color: #3A3A3A !important; background: #fff !important; }
+            label, .mat-label, [class*="label"] { color: #555 !important; opacity: 1 !important; }
+            button { background: #8B9D83 !important; color: #fff !important; }
+          `;
+          recranetEl.shadowRoot.appendChild(style);
+          console.log("[Recranet] Injected styles into shadow DOM");
+        } else {
+          console.log("[Recranet] No shadow root found or not accessible");
+        }
         
         setWidgetReady(true);
       }, 2000);
@@ -96,6 +121,12 @@ const BookingPage = () => {
 
     return () => {
       window.clearTimeout(timeoutId);
+      // Restore original base href when unmounting
+      const baseEl = document.querySelector('base');
+      if (baseEl) {
+        baseEl.setAttribute('href', '/');
+        console.log("[Recranet] Base href restored to /");
+      }
     };
   }, []);
 
