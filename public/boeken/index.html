@@ -311,7 +311,9 @@
         text-align: center;
       }
       
-      /* Recranet Widget - Root element styling */
+      /* ===== RECRANET WIDGET OVERRIDES ===== */
+      
+      /* Root element styling */
       recranet-accommodations {
         display: block;
         width: 100%;
@@ -320,10 +322,34 @@
         padding: 1.5rem;
       }
       
-      /* Force horizontal top search bar */
+      /* ===== TYPOGRAPHY: Consistent fonts ===== */
+      recranet-accommodations h1,
+      recranet-accommodations h2,
+      recranet-accommodations h3,
+      recranet-accommodations [class*="title"],
+      recranet-accommodations [class*="name"] {
+        font-family: 'Playfair Display', Georgia, serif !important;
+        color: #3A3A3A !important;
+        font-weight: 600 !important;
+        letter-spacing: -0.01em !important;
+      }
+      
+      recranet-accommodations,
+      recranet-accommodations p,
+      recranet-accommodations span,
+      recranet-accommodations label,
+      recranet-accommodations .mat-mdc-form-field,
+      recranet-accommodations .mdc-text-field,
+      recranet-accommodations button {
+        font-family: 'Inter', -apple-system, sans-serif !important;
+        color: #3A3A3A !important;
+        line-height: 1.6 !important;
+      }
+      
+      /* ===== SEARCH BAR: Horizontal layout ===== */
       recranet-accommodations .search-bar-sticky,
       recranet-accommodations [class*="search-bar"],
-      recranet-accommodations .recranet-search-form,
+      recranet-accommodations [class*="search-form"],
       recranet-accommodations form.ng-untouched,
       recranet-accommodations form.ng-pristine {
         display: flex !important;
@@ -331,10 +357,11 @@
         flex-wrap: wrap !important;
         align-items: flex-end !important;
         gap: 1rem !important;
-        padding: 1.5rem !important;
+        padding: 1.25rem 1.5rem !important;
         background: #f8f7f5 !important;
         border-radius: 0.5rem !important;
         margin-bottom: 1.5rem !important;
+        border: 1px solid #E5E0D8 !important;
       }
       
       recranet-accommodations .search-bar-sticky > *,
@@ -350,7 +377,7 @@
         min-width: 120px !important;
       }
       
-      /* Main layout: sidebar + content grid */
+      /* ===== MAIN LAYOUT: Sidebar + content grid ===== */
       recranet-accommodations .accommodation-list,
       recranet-accommodations [class*="accommodation-list"],
       recranet-accommodations .results-container,
@@ -368,11 +395,12 @@
         background: #f8f7f5 !important;
         padding: 1.5rem !important;
         border-radius: 0.5rem !important;
+        border: 1px solid #E5E0D8 !important;
         position: sticky !important;
         top: 6rem !important;
       }
       
-      /* Accommodation card: 3-column horizontal layout */
+      /* ===== ACCOMMODATION CARD: 3-column layout ===== */
       recranet-accommodations .accommodation-card,
       recranet-accommodations [class*="accommodation-card"],
       recranet-accommodations .accommodation-item,
@@ -382,18 +410,24 @@
         gap: 1.5rem !important;
         align-items: start !important;
         background: white !important;
-        border: 1px solid var(--recranet-border) !important;
+        border: 1px solid #E5E0D8 !important;
         border-radius: 0.5rem !important;
         overflow: hidden !important;
         margin-bottom: 1rem !important;
         padding: 0 !important;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.04) !important;
+        transition: box-shadow 0.2s ease !important;
       }
       
-      /* Image container: proper aspect ratio */
+      recranet-accommodations .accommodation-card:hover,
+      recranet-accommodations [class*="accommodation-card"]:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+      }
+      
+      /* Card image */
       recranet-accommodations .accommodation-card img,
       recranet-accommodations [class*="accommodation-card"] img,
-      recranet-accommodations .accommodation-item img,
-      recranet-accommodations [class*="accommodation-item"] img {
+      recranet-accommodations .accommodation-item img {
         width: 240px !important;
         height: 180px !important;
         object-fit: cover !important;
@@ -401,14 +435,14 @@
         margin: 0 !important;
       }
       
-      /* Details section */
+      /* Card details */
       recranet-accommodations .accommodation-card .details,
       recranet-accommodations [class*="accommodation-card"] [class*="details"],
       recranet-accommodations [class*="accommodation-card"] [class*="content"] {
         padding: 1.25rem 0 !important;
       }
       
-      /* Price section styling */
+      /* Card price section */
       recranet-accommodations [class*="price"],
       recranet-accommodations .price-section,
       recranet-accommodations [class*="booking"] {
@@ -421,71 +455,307 @@
         min-height: 100% !important;
       }
       
-      /* Theme colors via CSS variables */
+      /* ===== PHOTO GALLERY: 5-photo grid layout ===== */
+      recranet-accommodations [class*="gallery"],
+      recranet-accommodations [class*="image-grid"],
+      recranet-accommodations [class*="images-container"],
+      recranet-accommodations .accommodation-images {
+        display: grid !important;
+        grid-template-columns: 2fr 1fr 1fr !important;
+        grid-template-rows: repeat(2, 180px) !important;
+        gap: 0.5rem !important;
+        margin-bottom: 2rem !important;
+        border-radius: 0.75rem !important;
+        overflow: hidden !important;
+      }
+      
+      /* Main image spans 2 rows */
+      recranet-accommodations [class*="gallery"] > :first-child,
+      recranet-accommodations [class*="image-grid"] > :first-child,
+      recranet-accommodations [class*="images-container"] > :first-child {
+        grid-row: span 2 !important;
+        height: 100% !important;
+      }
+      
+      recranet-accommodations [class*="gallery"] img,
+      recranet-accommodations [class*="image-grid"] img,
+      recranet-accommodations [class*="images-container"] img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        cursor: pointer !important;
+        transition: transform 0.2s ease, opacity 0.2s ease !important;
+      }
+      
+      recranet-accommodations [class*="gallery"] img:hover,
+      recranet-accommodations [class*="image-grid"] img:hover {
+        opacity: 0.9 !important;
+      }
+      
+      /* "View all photos" button */
+      recranet-accommodations [class*="view-all"],
+      recranet-accommodations [class*="all-photos"],
+      recranet-accommodations [class*="gallery"] button,
+      recranet-accommodations [class*="images"] button {
+        position: absolute !important;
+        bottom: 1rem !important;
+        right: 1rem !important;
+        background: rgba(255,255,255,0.95) !important;
+        color: #3A3A3A !important;
+        padding: 0.625rem 1rem !important;
+        border-radius: 0.375rem !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+        font-size: 0.875rem !important;
+        font-weight: 500 !important;
+        border: none !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+      }
+      
+      recranet-accommodations [class*="view-all"]:hover,
+      recranet-accommodations [class*="gallery"] button:hover {
+        background: white !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+      }
+      
+      /* ===== AVAILABILITY CALENDARS: Side-by-side ===== */
+      recranet-accommodations [class*="availability"],
+      recranet-accommodations [class*="calendar-container"],
+      recranet-accommodations [class*="calendars"],
+      recranet-accommodations .availability-section {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 1.5rem !important;
+        justify-content: flex-start !important;
+        padding: 1rem 0 !important;
+      }
+      
+      recranet-accommodations .mat-calendar,
+      recranet-accommodations [class*="month-calendar"],
+      recranet-accommodations [class*="calendar-month"] {
+        flex: 0 0 auto !important;
+        min-width: 280px !important;
+        max-width: 320px !important;
+        background: white !important;
+        border: 1px solid #E5E0D8 !important;
+        border-radius: 0.5rem !important;
+        padding: 1rem !important;
+      }
+      
+      /* Calendar months grid */
+      recranet-accommodations [class*="months-wrapper"],
+      recranet-accommodations [class*="months-container"],
+      recranet-accommodations [class*="calendar-grid"] {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 320px)) !important;
+        gap: 1.5rem !important;
+      }
+      
+      /* Calendar header styling */
+      recranet-accommodations .mat-calendar-header,
+      recranet-accommodations [class*="calendar-header"] {
+        padding: 0.5rem 0 1rem 0 !important;
+        border-bottom: 1px solid #E5E0D8 !important;
+        margin-bottom: 0.75rem !important;
+      }
+      
+      recranet-accommodations .mat-calendar-period-button,
+      recranet-accommodations [class*="calendar"] [class*="period"] {
+        font-family: 'Playfair Display', Georgia, serif !important;
+        font-weight: 600 !important;
+        font-size: 1rem !important;
+        color: #3A3A3A !important;
+      }
+      
+      /* Calendar day cells */
+      recranet-accommodations .mat-calendar-body-cell,
+      recranet-accommodations [class*="calendar-day"] {
+        font-size: 0.875rem !important;
+        border-radius: 50% !important;
+      }
+      
+      recranet-accommodations .mat-calendar-body-selected,
+      recranet-accommodations [class*="selected"] {
+        background-color: #8B9D83 !important;
+        color: white !important;
+      }
+      
+      recranet-accommodations .mat-calendar-body-in-range,
+      recranet-accommodations [class*="in-range"] {
+        background-color: rgba(139, 157, 131, 0.15) !important;
+      }
+      
+      /* Available/unavailable day styling */
+      recranet-accommodations [class*="available"] {
+        background-color: rgba(139, 157, 131, 0.1) !important;
+        color: #3A3A3A !important;
+      }
+      
+      recranet-accommodations [class*="unavailable"],
+      recranet-accommodations [class*="disabled"] {
+        color: #ccc !important;
+        text-decoration: line-through !important;
+      }
+      
+      /* ===== BUTTONS: Brand styling ===== */
+      recranet-accommodations .mat-mdc-raised-button,
+      recranet-accommodations .mat-mdc-unelevated-button,
+      recranet-accommodations button[color="primary"],
+      recranet-accommodations .mat-primary {
+        background-color: #8B9D83 !important;
+        color: white !important;
+        font-weight: 500 !important;
+        border-radius: 0.375rem !important;
+        text-transform: none !important;
+        letter-spacing: normal !important;
+        padding: 0.625rem 1.5rem !important;
+        box-shadow: none !important;
+        transition: all 0.2s ease !important;
+      }
+      
+      recranet-accommodations .mat-mdc-raised-button:hover,
+      recranet-accommodations button[color="primary"]:hover {
+        background-color: #7A8C73 !important;
+        box-shadow: 0 2px 8px rgba(139, 157, 131, 0.3) !important;
+      }
+      
+      recranet-accommodations .mat-mdc-outlined-button,
+      recranet-accommodations button[color="accent"] {
+        border: 1.5px solid #8B9D83 !important;
+        color: #8B9D83 !important;
+        background: transparent !important;
+        font-weight: 500 !important;
+        border-radius: 0.375rem !important;
+      }
+      
+      recranet-accommodations .mat-mdc-outlined-button:hover {
+        background: rgba(139, 157, 131, 0.08) !important;
+      }
+      
+      /* ===== FORM FIELDS: Clean styling ===== */
+      recranet-accommodations .mat-mdc-form-field,
+      recranet-accommodations .mdc-text-field {
+        background: white !important;
+        border-radius: 0.375rem !important;
+      }
+      
+      recranet-accommodations .mat-mdc-form-field-focus-overlay {
+        background: transparent !important;
+      }
+      
+      recranet-accommodations .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+        background-color: #f8f7f5 !important;
+      }
+      
+      recranet-accommodations .mdc-floating-label,
+      recranet-accommodations .mat-mdc-floating-label {
+        font-family: 'Inter', sans-serif !important;
+        color: #6B7280 !important;
+      }
+      
+      recranet-accommodations .mdc-text-field--focused .mdc-floating-label {
+        color: #8B9D83 !important;
+      }
+      
+      recranet-accommodations .mdc-line-ripple::after {
+        border-bottom-color: #8B9D83 !important;
+      }
+      
+      /* ===== TABS: Clean styling ===== */
+      recranet-accommodations .mat-mdc-tab-group,
+      recranet-accommodations [class*="tabs"] {
+        margin-bottom: 1.5rem !important;
+      }
+      
+      recranet-accommodations .mat-mdc-tab,
+      recranet-accommodations [class*="tab-label"] {
+        font-family: 'Inter', sans-serif !important;
+        font-weight: 500 !important;
+        letter-spacing: 0 !important;
+        text-transform: none !important;
+        color: #6B7280 !important;
+        padding: 0.75rem 1.5rem !important;
+      }
+      
+      recranet-accommodations .mat-mdc-tab.mdc-tab--active,
+      recranet-accommodations [class*="tab-active"] {
+        color: #3A3A3A !important;
+      }
+      
+      recranet-accommodations .mat-mdc-tab-indicator,
+      recranet-accommodations .mdc-tab-indicator__content--underline {
+        border-color: #8B9D83 !important;
+        background-color: #8B9D83 !important;
+      }
+      
+      /* ===== DETAIL PAGE: Booking panel ===== */
+      recranet-accommodations [class*="booking-panel"],
+      recranet-accommodations [class*="booking-widget"],
+      recranet-accommodations [class*="sticky-booking"] {
+        background: white !important;
+        border: 1px solid #E5E0D8 !important;
+        border-radius: 0.5rem !important;
+        padding: 1.5rem !important;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.08) !important;
+        position: sticky !important;
+        top: 6rem !important;
+      }
+      
+      /* Price display */
+      recranet-accommodations [class*="price-display"],
+      recranet-accommodations [class*="total-price"] {
+        font-family: 'Playfair Display', Georgia, serif !important;
+        font-size: 1.5rem !important;
+        font-weight: 600 !important;
+        color: #3A3A3A !important;
+      }
+      
+      recranet-accommodations [class*="price-label"],
+      recranet-accommodations [class*="per-night"] {
+        font-size: 0.875rem !important;
+        color: #6B7280 !important;
+        font-weight: 400 !important;
+      }
+      
+      /* ===== AMENITIES/FEATURES: Clean list ===== */
+      recranet-accommodations [class*="amenities"],
+      recranet-accommodations [class*="features"],
+      recranet-accommodations [class*="facilities"] {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 0.75rem !important;
+        margin: 1rem 0 !important;
+      }
+      
+      recranet-accommodations [class*="amenity"],
+      recranet-accommodations [class*="feature-item"],
+      recranet-accommodations [class*="facility-item"] {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 0.5rem !important;
+        font-size: 0.875rem !important;
+        color: #4B5563 !important;
+        background: #f8f7f5 !important;
+        padding: 0.375rem 0.75rem !important;
+        border-radius: 0.25rem !important;
+      }
+      
+      /* ===== THEME COLORS ===== */
       recranet-accommodations,
       recranet-search-bar,
       recranet-basket,
-      recranet-checkout {
-        --mdc-theme-primary: var(--recranet-primary) !important;
-        --mdc-theme-text-primary-on-background: var(--recranet-text) !important;
-        --mdc-filled-button-container-color: var(--recranet-primary) !important;
-      }
-      
-      recranet-accommodations mat-form-field,
-      recranet-accommodations .mat-mdc-form-field {
-        --mdc-filled-text-field-label-text-color: var(--recranet-text-light) !important;
-        --mdc-filled-text-field-input-text-color: var(--recranet-text) !important;
-      }
-      
-      recranet-accommodations h1,
-      recranet-accommodations h2,
-      recranet-accommodations h3,
-      recranet-accommodations h4 {
-        color: var(--recranet-text) !important;
-        font-family: 'Playfair Display', serif !important;
-      }
-      
-      recranet-accommodations button[color="primary"],
-      recranet-accommodations .mat-mdc-raised-button {
-        background-color: var(--recranet-primary) !important;
-        color: #FFFFFF !important;
-      }
-      
-      recranet-accommodations a {
-        color: #7A8E72 !important;
-      }
-      
-      .cdk-overlay-container,
-      .cdk-overlay-pane {
-        z-index: 9999 !important;
-      }
-      
-      .mat-mdc-select-panel,
-      .mat-mdc-menu-panel,
-      .mat-mdc-autocomplete-panel {
-        background-color: var(--recranet-bg) !important;
-      }
-      
-      .mat-mdc-option,
-      .mat-mdc-menu-item {
-        color: var(--recranet-text) !important;
-        background-color: var(--recranet-bg) !important;
-      }
-      
-      .mat-datepicker-content,
-      .mat-calendar {
-        background-color: var(--recranet-bg) !important;
-      }
-      
-      .mat-calendar-body-cell-content,
-      .mat-calendar-body-label,
-      .mat-calendar-table-header th {
-        color: var(--recranet-text) !important;
-      }
-      
-      .mat-calendar-body-selected {
-        background-color: var(--recranet-primary) !important;
-        color: #FFFFFF !important;
+      recranet-reservation-summary {
+        --recranet-primary: #8B9D83;
+        --recranet-primary-hover: #7A8C73;
+        --recranet-secondary: #D4C5B5;
+        --recranet-background: #FDFCFA;
+        --recranet-surface: #FFFFFF;
+        --recranet-text: #3A3A3A;
+        --recranet-text-muted: #6B7280;
+        --recranet-border: #E5E0D8;
+        --recranet-accent: #B8860B;
+        --recranet-focus: #8B9D83;
       }
       
       /* Mobile */
