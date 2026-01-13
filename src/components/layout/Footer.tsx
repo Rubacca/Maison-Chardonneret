@@ -72,12 +72,12 @@ export const Footer = ({ currentLang, onLangChange }: FooterProps) => {
                 {quickLinks.map((link) => (
                   <li key={link.label}>
                     {link.href.startsWith("/") ? (
-                      <Link
-                        to={link.href}
+                      <a
+                        href={link.href}
                         className="font-sans text-sm text-white/70 hover:text-white transition-colors"
                       >
                         {link.label}
-                      </Link>
+                      </a>
                     ) : (
                       <a
                         href={link.href}

@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/boeken/" />
+    <title>Reserveren | Maison Chardonneret Elegant</title>
+    <meta name="description" content="Boek uw verblijf bij Maison Chardonneret Elegant - een authentieke gîte voor 10 personen in brocante stijl, genesteld in de prachtige Ardennen te Orchimont." />
+    
+    <!-- Google Fonts: Playfair Display + Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+      /* Brand Colors */
+      :root {
+        --brand-dark: #3A3A3A;
+        --brand-cream: #FAF8F5;
+        --brand-sage: #8B9D83;
+        --brand-clay: #C9A588;
+        --recranet-primary: #8B9D83;
+        --recranet-text: #3A3A3A;
+        --recranet-text-light: #555555;
+        --recranet-bg: #FFFFFF;
+        --recranet-border: #E5E0D8;
+      }
+      
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background-color: var(--brand-cream);
+        color: var(--brand-dark);
+        -webkit-font-smoothing: antialiased;
+        line-height: 1.5;
+      }
+      
+      .font-serif {
+        font-family: 'Playfair Display', serif;
+      }
+      
+      /* Header */
+      .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        background: rgba(250, 248, 245, 0.95);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      }
+      
+      .header-container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 5rem;
+      }
+      
+      .logo {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.5rem;
+        color: var(--brand-dark);
+        text-decoration: none;
+      }
+      
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+      }
+      
+      .nav-link {
+        font-size: 0.875rem;
+        color: rgba(58, 58, 58, 0.8);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      
+      .nav-link:hover {
+        color: var(--brand-dark);
+      }
+      
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      
+      .lang-toggle {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 0.375rem;
+        padding: 0.25rem;
+      }
+      
+      .lang-btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+        border: none;
+        background: transparent;
+        color: rgba(58, 58, 58, 0.6);
+        cursor: pointer;
+        border-radius: 0.25rem;
+        transition: all 0.2s;
+      }
+      
+      .lang-btn.active {
+        background: white;
+        color: var(--brand-dark);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+      
+      .lang-btn:hover:not(.active) {
+        color: var(--brand-dark);
+      }
+      
+      /* Main content */
+      .main {
+        padding-top: 5rem;
+        min-height: 100vh;
+      }
+      
+      /* Hero */
+      .hero {
+        background: linear-gradient(135deg, var(--brand-dark) 0%, #2a2a2a 100%);
+        color: white;
+        padding: 4rem 1.5rem;
+        text-align: center;
+      }
+      
+      .hero-container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      
+      .hero-tagline {
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--brand-sage);
+        margin-bottom: 1rem;
+      }
+      
+      .hero-title {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(2rem, 5vw, 3rem);
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.7);
+        max-width: 500px;
+        margin: 0 auto;
+      }
+      
+      /* Quick info bar */
+      .quick-info {
+        background: white;
+        border-bottom: 1px solid var(--recranet-border);
+        padding: 1rem 1.5rem;
+      }
+      
+      .quick-info-container {
+        max-width: 1280px;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1.5rem;
+      }
+      
+      .quick-info-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        color: var(--brand-dark);
+      }
+      
+      .quick-info-icon {
+        color: var(--brand-sage);
+      }
+      
+      /* Widget section */
+      .widget-section {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem 4rem;
+      }
+      
+      .widget-container {
+        background: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        min-height: 600px;
+      }
+      
+      /* Fallback section */
+      .fallback-section {
+        text-align: center;
+        padding: 2rem;
+        background: rgba(139, 157, 131, 0.1);
+        border-radius: 0.5rem;
+        margin-top: 2rem;
+      }
+      
+      .fallback-text {
+        font-size: 0.875rem;
+        color: var(--recranet-text-light);
+        margin-bottom: 1rem;
+      }
+      
+      .fallback-link {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        background: var(--brand-sage);
+        color: white;
+        text-decoration: none;
+        border-radius: 0.375rem;
+        font-weight: 500;
+        transition: background 0.2s;
+      }
+      
+      .fallback-link:hover {
+        background: #7a8e72;
+      }
+      
+      /* Help text */
+      .help-text {
+        text-align: center;
+        padding: 1.5rem;
+        font-size: 0.875rem;
+        color: var(--recranet-text-light);
+      }
+      
+      .help-link {
+        color: var(--brand-sage);
+        text-decoration: none;
+      }
+      
+      .help-link:hover {
+        text-decoration: underline;
+      }
+      
+      /* Footer */
+      .footer {
+        background: var(--brand-dark);
+        color: white;
+        padding: 3rem 1.5rem;
+      }
+      
+      .footer-container {
+        max-width: 1280px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2rem;
+      }
+      
+      .footer-brand {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+      }
+      
+      .footer-desc {
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.6;
+      }
+      
+      .footer-title {
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+      }
+      
+      .footer-link {
+        display: block;
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        padding: 0.25rem 0;
+        transition: color 0.2s;
+      }
+      
+      .footer-link:hover {
+        color: white;
+      }
+      
+      .footer-bottom {
+        max-width: 1280px;
+        margin: 2rem auto 0;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.5);
+        text-align: center;
+      }
+      
+      /* Recranet Widget Overrides */
+      recranet-accommodations,
+      recranet-search-bar,
+      recranet-basket,
+      recranet-checkout,
+      [class^="recranet"] {
+        --mdc-theme-primary: var(--recranet-primary) !important;
+        --mdc-theme-text-primary-on-background: var(--recranet-text) !important;
+        display: block !important;
+        width: 100% !important;
+        min-height: 400px;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+      }
+      
+      recranet-accommodations *:not(button):not([class*="btn"]):not([class*="primary"]) {
+        color: var(--recranet-text) !important;
+      }
+      
+      recranet-accommodations mat-form-field,
+      recranet-accommodations .mat-mdc-form-field {
+        --mdc-filled-text-field-label-text-color: var(--recranet-text-light) !important;
+        --mdc-filled-text-field-input-text-color: var(--recranet-text) !important;
+      }
+      
+      recranet-accommodations input,
+      recranet-accommodations select,
+      recranet-accommodations textarea {
+        color: var(--recranet-text) !important;
+        background-color: var(--recranet-bg) !important;
+      }
+      
+      recranet-accommodations h1,
+      recranet-accommodations h2,
+      recranet-accommodations h3,
+      recranet-accommodations h4 {
+        color: var(--recranet-text) !important;
+        font-family: 'Playfair Display', serif !important;
+      }
+      
+      recranet-accommodations button[color="primary"],
+      recranet-accommodations .mat-mdc-raised-button {
+        background-color: var(--recranet-primary) !important;
+        color: #FFFFFF !important;
+      }
+      
+      recranet-accommodations a {
+        color: #7A8E72 !important;
+      }
+      
+      .cdk-overlay-container,
+      .cdk-overlay-pane {
+        z-index: 9999 !important;
+      }
+      
+      .mat-mdc-select-panel,
+      .mat-mdc-menu-panel,
+      .mat-mdc-autocomplete-panel {
+        background-color: var(--recranet-bg) !important;
+      }
+      
+      .mat-mdc-option,
+      .mat-mdc-menu-item {
+        color: var(--recranet-text) !important;
+        background-color: var(--recranet-bg) !important;
+      }
+      
+      .mat-datepicker-content,
+      .mat-calendar {
+        background-color: var(--recranet-bg) !important;
+      }
+      
+      .mat-calendar-body-cell-content,
+      .mat-calendar-body-label,
+      .mat-calendar-table-header th {
+        color: var(--recranet-text) !important;
+      }
+      
+      .mat-calendar-body-selected {
+        background-color: var(--recranet-primary) !important;
+        color: #FFFFFF !important;
+      }
+      
+      /* Mobile */
+      @media (max-width: 768px) {
+        .nav-links {
+          display: none;
+        }
+        
+        .hero {
+          padding: 3rem 1rem;
+        }
+        
+        .quick-info-container {
+          gap: 1rem;
+        }
+        
+        .quick-info-item {
+          font-size: 0.75rem;
+        }
+      }
+    </style>
+    
+    <!-- Recranet SDK Configuration -->
+    <script>
+      (function() {
+        var params = new URLSearchParams(window.location.search);
+        var lang = params.get('lang') === 'fr' ? 'fr' : 'nl';
+        
+        // Set config before SDK loads
+        window.recranetConfig = {
+          organization: 1640,
+          locale: lang,
+          currency: 'EUR'
+        };
+        
+        // Update HTML lang attribute
+        document.documentElement.lang = lang;
+        
+        // Store for later use
+        window.currentLang = lang;
+      })();
+    </script>
+  </head>
+  
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <div class="header-container">
+        <a href="/" class="logo">Maison Chardonneret</a>
+        
+        <nav class="nav-links">
+          <a href="/#home" class="nav-link">Home</a>
+          <a href="/#huis" class="nav-link">Het Huis</a>
+          <a href="/#omgeving" class="nav-link">Omgeving</a>
+          <a href="/boeken/" class="nav-link" style="color: var(--brand-sage); font-weight: 500;">Boeken</a>
+          <a href="/#contact" class="nav-link">Contact</a>
+        </nav>
+        
+        <div class="header-right">
+          <div class="lang-toggle">
+            <button class="lang-btn" id="lang-nl" onclick="switchLang('nl')">NL</button>
+            <button class="lang-btn" id="lang-fr" onclick="switchLang('fr')">FR</button>
+          </div>
+        </div>
+      </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="main">
+      <!-- Hero -->
+      <section class="hero">
+        <div class="hero-container">
+          <p class="hero-tagline" id="hero-tagline">Reserveer uw verblijf</p>
+          <h1 class="hero-title" id="hero-title">Boek Maison Chardonneret</h1>
+          <p class="hero-subtitle" id="hero-subtitle">Selecteer uw data en ontdek de beschikbaarheid van onze authentieke vakantiewoning.</p>
+        </div>
+      </section>
+      
+      <!-- Quick Info -->
+      <section class="quick-info">
+        <div class="quick-info-container">
+          <div class="quick-info-item">
+            <svg class="quick-info-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9,22 9,12 15,12 15,22"/>
+            </svg>
+            <span id="info-house">Volledig huis</span>
+          </div>
+          <div class="quick-info-item">
+            <svg class="quick-info-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M2 4v16"/>
+              <path d="M2 8h18a2 2 0 0 1 2 2v10"/>
+              <path d="M2 17h20"/>
+              <path d="M6 8v9"/>
+            </svg>
+            <span id="info-rooms">5 slaapkamers</span>
+          </div>
+          <div class="quick-info-item">
+            <svg class="quick-info-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+            <span id="info-guests">10 gasten</span>
+          </div>
+          <div class="quick-info-item">
+            <svg class="quick-info-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            <span id="info-location">Orchimont, Ardennen</span>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Booking Widget -->
+      <section class="widget-section">
+        <div class="widget-container">
+          <recranet-accommodations></recranet-accommodations>
+        </div>
+        
+        <!-- Fallback -->
+        <div class="fallback-section">
+          <p class="fallback-text" id="fallback-text">Widget niet zichtbaar? Boek direct via ons reserveringsportaal:</p>
+          <a id="fallback-link" href="https://maison-chardonneret-elegant.recranet.com/nl/accommodations" class="fallback-link" target="_blank" rel="noopener">
+            <span id="fallback-btn">Direct boeken →</span>
+          </a>
+        </div>
+        
+        <!-- Help -->
+        <div class="help-text">
+          <span id="help-text">Vragen over uw reservering? </span>
+          <a href="/#contact" class="help-link" id="help-link">Neem contact op</a>
+        </div>
+      </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-container">
+        <div>
+          <h3 class="footer-brand">Maison Chardonneret</h3>
+          <p class="footer-desc" id="footer-desc">Tijdloze rust in het hart van de Ardennen. Een authentieke vakantiewoning voor het hele gezin.</p>
+        </div>
+        <div>
+          <h4 class="footer-title" id="footer-nav-title">Navigatie</h4>
+          <a href="/" class="footer-link">Home</a>
+          <a href="/#huis" class="footer-link" id="footer-link-house">Het Huis</a>
+          <a href="/#omgeving" class="footer-link" id="footer-link-area">Omgeving</a>
+          <a href="/boeken/" class="footer-link" id="footer-link-book">Boeken</a>
+        </div>
+        <div>
+          <h4 class="footer-title">Contact</h4>
+          <p class="footer-desc">Rue du Chardonneret<br>5560 Orchimont, België</p>
+          <p class="footer-desc" style="margin-top: 0.5rem;">info@maison-chardonneret.be</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© <script>document.write(new Date().getFullYear())</script> Maison Chardonneret Elegant. Alle rechten voorbehouden.</p>
+      </div>
+    </footer>
+    
+    <!-- Language switching and SDK loading -->
+    <script>
+      // Translations
+      var translations = {
+        nl: {
+          heroTagline: 'Reserveer uw verblijf',
+          heroTitle: 'Boek Maison Chardonneret',
+          heroSubtitle: 'Selecteer uw data en ontdek de beschikbaarheid van onze authentieke vakantiewoning.',
+          infoHouse: 'Volledig huis',
+          infoRooms: '5 slaapkamers',
+          infoGuests: '10 gasten',
+          infoLocation: 'Orchimont, Ardennen',
+          fallbackText: 'Widget niet zichtbaar? Boek direct via ons reserveringsportaal:',
+          fallbackBtn: 'Direct boeken →',
+          helpText: 'Vragen over uw reservering? ',
+          helpLink: 'Neem contact op',
+          footerDesc: 'Tijdloze rust in het hart van de Ardennen. Een authentieke vakantiewoning voor het hele gezin.',
+          footerNavTitle: 'Navigatie',
+          footerLinkHouse: 'Het Huis',
+          footerLinkArea: 'Omgeving',
+          footerLinkBook: 'Boeken',
+          portalUrl: 'https://maison-chardonneret-elegant.recranet.com/nl/accommodations'
+        },
+        fr: {
+          heroTagline: 'Réservez votre séjour',
+          heroTitle: 'Réservez Maison Chardonneret',
+          heroSubtitle: 'Sélectionnez vos dates et découvrez la disponibilité de notre gîte authentique.',
+          infoHouse: 'Maison entière',
+          infoRooms: '5 chambres',
+          infoGuests: '10 personnes',
+          infoLocation: 'Orchimont, Ardennes',
+          fallbackText: 'Widget invisible? Réservez directement via notre portail:',
+          fallbackBtn: 'Réserver directement →',
+          helpText: 'Questions sur votre réservation? ',
+          helpLink: 'Contactez-nous',
+          footerDesc: 'Sérénité intemporelle au cœur des Ardennes. Un gîte authentique pour toute la famille.',
+          footerNavTitle: 'Navigation',
+          footerLinkHouse: 'La Maison',
+          footerLinkArea: 'Environs',
+          footerLinkBook: 'Réserver',
+          portalUrl: 'https://maison-chardonneret-elegant.recranet.com/fr/accommodations'
+        }
+      };
+      
+      function updateContent(lang) {
+        var t = translations[lang];
+        
+        // Update text content
+        document.getElementById('hero-tagline').textContent = t.heroTagline;
+        document.getElementById('hero-title').textContent = t.heroTitle;
+        document.getElementById('hero-subtitle').textContent = t.heroSubtitle;
+        document.getElementById('info-house').textContent = t.infoHouse;
+        document.getElementById('info-rooms').textContent = t.infoRooms;
+        document.getElementById('info-guests').textContent = t.infoGuests;
+        document.getElementById('info-location').textContent = t.infoLocation;
+        document.getElementById('fallback-text').textContent = t.fallbackText;
+        document.getElementById('fallback-btn').textContent = t.fallbackBtn;
+        document.getElementById('fallback-link').href = t.portalUrl;
+        document.getElementById('help-text').textContent = t.helpText;
+        document.getElementById('help-link').textContent = t.helpLink;
+        document.getElementById('footer-desc').textContent = t.footerDesc;
+        document.getElementById('footer-nav-title').textContent = t.footerNavTitle;
+        document.getElementById('footer-link-house').textContent = t.footerLinkHouse;
+        document.getElementById('footer-link-area').textContent = t.footerLinkArea;
+        document.getElementById('footer-link-book').textContent = t.footerLinkBook;
+        
+        // Update lang buttons
+        document.getElementById('lang-nl').classList.toggle('active', lang === 'nl');
+        document.getElementById('lang-fr').classList.toggle('active', lang === 'fr');
+      }
+      
+      function switchLang(newLang) {
+        var url = new URL(window.location);
+        url.searchParams.set('lang', newLang);
+        window.location.href = url.toString();
+      }
+      
+      // Initialize
+      document.addEventListener('DOMContentLoaded', function() {
+        var lang = window.currentLang || 'nl';
+        updateContent(lang);
+        
+        // Load SDK dynamically based on language
+        var script = document.createElement('script');
+        script.src = 'https://static.recranet.com/elements/' + lang + '/sdk.js?v=' + Date.now();
+        script.async = true;
+        document.head.appendChild(script);
+      });
+    </script>
+  </body>
+</html>
