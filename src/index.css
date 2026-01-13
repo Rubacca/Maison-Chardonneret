@@ -143,13 +143,11 @@
   --recranet-border: #E5E0D8;
 }
 
-/* Base Recranet containers */
+/* Base Recranet containers - Only root styling, NO layout overrides on children */
 recranet-accommodations,
 recranet-search-bar,
 recranet-basket,
-recranet-checkout,
-[class^="recranet"],
-.recranet-element {
+recranet-checkout {
   --mdc-theme-primary: var(--recranet-primary) !important;
   --mdc-theme-text-primary-on-background: var(--recranet-text) !important;
   --mdc-theme-text-secondary-on-background: var(--recranet-text-light) !important;
@@ -157,10 +155,9 @@ recranet-checkout,
   --mat-select-trigger-text-color: var(--recranet-text) !important;
   --mat-option-label-text-color: var(--recranet-text) !important;
   
-  display: block !important;
-  width: 100% !important;
-  min-height: 400px;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  display: block;
+  width: 100%;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 /* Global text color fix for all widget children */
