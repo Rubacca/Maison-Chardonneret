@@ -4,6 +4,12 @@ import { useEffect } from "react";
 const NotFound = () => {
   const location = useLocation();
 
+  // If trying to access /boeken, redirect to static page
+  if (location.pathname.startsWith('/boeken')) {
+    window.location.href = '/boeken/index.html';
+    return null;
+  }
+
   useEffect(() => {
     console.error("404 Error: User attempted to access non-existent route:", location.pathname);
   }, [location.pathname]);
