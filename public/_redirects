@@ -1,0 +1,7 @@
+# Serve static booking page
+/boeken /boeken/index.html 200
+/boeken/ /boeken/index.html 200
+/boeken/* /boeken/index.html 200
+
+# SPA fallback for all other routes
+/* /index.html 200
