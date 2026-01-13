@@ -128,3 +128,75 @@
     @apply bg-background/80 backdrop-blur-md;
   }
 }
+
+/* Recranet Widget Styling Overrides */
+.recranet-element {
+  /* Ensure widget has proper text contrast */
+  --recranet-text-color: hsl(0 0% 23%);
+  --recranet-text-muted: hsl(0 0% 40%);
+  --recranet-border: hsl(36 15% 85%);
+  --recranet-bg: hsl(0 0% 100%);
+  --recranet-accent: hsl(104 12% 56%);
+}
+
+.recranet-element,
+.recranet-element * {
+  color: hsl(0 0% 23%) !important;
+}
+
+.recranet-element input,
+.recranet-element select,
+.recranet-element textarea {
+  color: hsl(0 0% 23%) !important;
+  background-color: hsl(0 0% 100%) !important;
+  border-color: hsl(36 15% 85%) !important;
+}
+
+.recranet-element input::placeholder,
+.recranet-element textarea::placeholder {
+  color: hsl(0 0% 50%) !important;
+}
+
+.recranet-element label,
+.recranet-element .mat-form-field-label,
+.recranet-element .mat-select-placeholder {
+  color: hsl(0 0% 40%) !important;
+}
+
+.recranet-element button,
+.recranet-element .mat-button,
+.recranet-element .mat-raised-button {
+  background-color: hsl(104 12% 56%) !important;
+  color: hsl(0 0% 100%) !important;
+}
+
+.recranet-element a {
+  color: hsl(104 12% 46%) !important;
+}
+
+.recranet-element .mat-card,
+.recranet-element .mat-expansion-panel {
+  background-color: hsl(0 0% 100%) !important;
+  border: 1px solid hsl(36 15% 85%) !important;
+}
+
+/* Ensure Recranet dropdowns are visible */
+.cdk-overlay-container,
+.cdk-overlay-pane,
+.mat-select-panel,
+.mat-menu-panel,
+.mat-datepicker-popup {
+  z-index: 9999 !important;
+  background-color: hsl(0 0% 100%) !important;
+}
+
+.mat-option,
+.mat-menu-item {
+  color: hsl(0 0% 23%) !important;
+  background-color: hsl(0 0% 100%) !important;
+}
+
+.mat-option:hover,
+.mat-menu-item:hover {
+  background-color: hsl(36 20% 92%) !important;
+}
