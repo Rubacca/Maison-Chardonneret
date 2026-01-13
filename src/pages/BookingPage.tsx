@@ -1,10 +1,10 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Container } from "@/components/layout/Container";
-import { Calendar, Users, Home, Loader2, AlertTriangle } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Calendar, Users, Home, Loader2, AlertTriangle, Info, ExternalLink } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 // Extend Window interface for Recranet config
 declare global {
@@ -32,22 +32,25 @@ const BookingPage = () => {
   const [sdkError, setSdkError] = useState<string | null>(null);
   const [widgetReady, setWidgetReady] = useState(false);
 
+  // Check for Google Maps API key
+  const googleApiKey = useMemo(() => {
+    return (import.meta as any).env?.VITE_GOOGLE_MAPS_API_KEY as string | undefined;
+  }, []);
+
+  const isMissingApiKey = !googleApiKey;
+
   // Load Recranet SDK dynamically
   const loadRecranetSDK = useCallback((lang: "nl" | "fr") => {
     setSdkStatus("loading");
     setSdkError(null);
     setWidgetReady(false);
 
-    const googleApiKey = (import.meta as any).env?.VITE_GOOGLE_MAPS_API_KEY as
-      | string
-      | undefined;
-
     // Set up Recranet config
     window.recranetConfig = {
       organization: 1640,
       locale: lang,
       currency: "EUR",
-      googleApiKey,
+      googleApiKey: googleApiKey || undefined,
     };
 
     console.log("[Recranet] Config set:", window.recranetConfig);
@@ -127,7 +130,7 @@ const BookingPage = () => {
     return () => {
       window.clearTimeout(timeoutId);
     };
-  }, []);
+  }, [googleApiKey]);
 
   // Load SDK on mount
   useEffect(() => {
@@ -161,7 +164,19 @@ const BookingPage = () => {
       withUs: "met ons op.",
       loading: "Beschikbaarheid laden...",
       error: "Er is een probleem opgetreden",
-      retry: "Probeer opnieuw"
+      retry: "Probeer opnieuw",
+      apiKeyWarning: {
+        title: "Google Maps API-sleutel vereist",
+        description: "De boekingswidget vereist een Google Maps API-sleutel om correct te werken.",
+        steps: [
+          "Ga naar de Google Cloud Console",
+          "Maak een nieuw project of selecteer een bestaand project",
+          "Schakel 'Maps JavaScript API' en 'Maps Embed API' in",
+          "Maak een API-sleutel aan onder 'Credentials'",
+          "Voeg de sleutel toe als VITE_GOOGLE_MAPS_API_KEY in uw omgevingsvariabelen"
+        ],
+        learnMore: "Meer informatie"
+      }
     },
     fr: {
       tagline: "Réservation",
@@ -178,7 +193,19 @@ const BookingPage = () => {
       withUs: ".",
       loading: "Chargement des disponibilités...",
       error: "Un problème est survenu",
-      retry: "Réessayer"
+      retry: "Réessayer",
+      apiKeyWarning: {
+        title: "Clé API Google Maps requise",
+        description: "Le widget de réservation nécessite une clé API Google Maps pour fonctionner correctement.",
+        steps: [
+          "Accédez à la Google Cloud Console",
+          "Créez un nouveau projet ou sélectionnez un projet existant",
+          "Activez 'Maps JavaScript API' et 'Maps Embed API'",
+          "Créez une clé API sous 'Credentials'",
+          "Ajoutez la clé comme VITE_GOOGLE_MAPS_API_KEY dans vos variables d'environnement"
+        ],
+        learnMore: "En savoir plus"
+      }
     }
   };
 
@@ -244,6 +271,37 @@ const BookingPage = () => {
           </div>
         </Container>
       </section>
+
+      {/* API Key Warning Banner */}
+      {isMissingApiKey && (
+        <section className="py-6 bg-amber-50 dark:bg-amber-950/30 border-b border-amber-200 dark:border-amber-800">
+          <Container>
+            <Alert className="bg-transparent border-amber-300 dark:border-amber-700">
+              <Info className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+              <AlertTitle className="text-amber-800 dark:text-amber-200 font-semibold">
+                {t.apiKeyWarning.title}
+              </AlertTitle>
+              <AlertDescription className="text-amber-700 dark:text-amber-300">
+                <p className="mb-3">{t.apiKeyWarning.description}</p>
+                <ol className="list-decimal list-inside space-y-1 text-sm mb-3">
+                  {t.apiKeyWarning.steps.map((step, index) => (
+                    <li key={index}>{step}</li>
+                  ))}
+                </ol>
+                <a
+                  href="https://console.cloud.google.com/apis/library/maps-backend.googleapis.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-amber-800 dark:text-amber-200 font-medium hover:underline"
+                >
+                  {t.apiKeyWarning.learnMore}
+                  <ExternalLink className="h-3 w-3" />
+                </a>
+              </AlertDescription>
+            </Alert>
+          </Container>
+        </section>
+      )}
 
       {/* Booking Section with Recranet SDK */}
       <section className="py-12 md:py-16 bg-background">
