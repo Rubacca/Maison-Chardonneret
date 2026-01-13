@@ -1,10 +1,9 @@
-import { useEffect, useState, useCallback } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Container } from "@/components/layout/Container";
-import { Calendar, Users, Home, Loader2, AlertTriangle } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Calendar, Users, Home } from "lucide-react";
 
 // Extend Window interface for Recranet config
 declare global {
@@ -17,129 +16,16 @@ declare global {
   }
 }
 
-type SDKStatus = "loading" | "loaded" | "error" | "timeout";
-
 const BookingPage = () => {
   const [currentLang, setCurrentLang] = useState<"nl" | "fr">(() => {
-    // Check URL for language param on initial load
     const params = new URLSearchParams(window.location.search);
     const langParam = params.get("lang");
     return langParam === "fr" ? "fr" : "nl";
   });
-  
-  const [sdkStatus, setSdkStatus] = useState<SDKStatus>("loading");
-  const [sdkError, setSdkError] = useState<string | null>(null);
-  const [widgetReady, setWidgetReady] = useState(false);
-
-  // Load Recranet SDK dynamically
-  const loadRecranetSDK = useCallback((lang: "nl" | "fr") => {
-    setSdkStatus("loading");
-    setSdkError(null);
-    setWidgetReady(false);
-
-    // Recranet SDK requires base href to be set to the booking page path
-    // Dynamically update the base href for this page
-    let baseEl = document.querySelector('base');
-    const originalBaseHref = baseEl?.getAttribute('href') || '/';
-    if (baseEl) {
-      baseEl.setAttribute('href', '/boeken');
-    } else {
-      baseEl = document.createElement('base');
-      baseEl.setAttribute('href', '/boeken');
-      document.head.prepend(baseEl);
-    }
-    console.log("[Recranet] Base href set to /boeken");
-
-    // Set up Recranet config
-    window.recranetConfig = {
-      organization: 1640,
-      locale: lang,
-      currency: "EUR",
-    };
-
-    console.log("[Recranet] Config set:", window.recranetConfig);
-
-    // Remove any existing SDK script(s)
-    document
-      .querySelectorAll('script[src*="static.recranet.com/elements"]')
-      .forEach((s) => s.remove());
-
-    // Timeout fallback
-    const timeoutId = window.setTimeout(() => {
-      console.warn("[Recranet] SDK loading timed out after 15 seconds");
-      setSdkStatus("timeout");
-      setSdkError("Booking system is taking longer than expected to load.");
-    }, 15000);
-
-    // Create and load new SDK script
-    const script = document.createElement("script");
-    const timestamp = Date.now();
-    script.src = `https://static.recranet.com/elements/${lang}/sdk.js?v=${timestamp}`;
-    script.async = true;
-
-    script.onload = () => {
-      console.log("[Recranet] SDK script loaded successfully");
-      window.clearTimeout(timeoutId);
-      setSdkStatus("loaded");
-      
-      // Give the SDK a moment to initialize, then show widget area
-      // The SDK may register elements lazily or on-demand
-      window.setTimeout(() => {
-        const elementName = "recranet-accommodations";
-        const isDefined = customElements.get(elementName);
-        console.log(`[Recranet] Custom element '${elementName}' defined:`, !!isDefined);
-        
-        // Inject styles into Recranet shadow DOM if accessible
-        const recranetEl = document.querySelector('recranet-accommodations');
-        if (recranetEl?.shadowRoot) {
-          const style = document.createElement('style');
-          style.textContent = `
-            * { color: #3A3A3A !important; -webkit-text-fill-color: #3A3A3A !important; }
-            input, select, textarea { color: #3A3A3A !important; background: #fff !important; }
-            label, .mat-label, [class*="label"] { color: #555 !important; opacity: 1 !important; }
-            button { background: #8B9D83 !important; color: #fff !important; }
-          `;
-          recranetEl.shadowRoot.appendChild(style);
-          console.log("[Recranet] Injected styles into shadow DOM");
-        } else {
-          console.log("[Recranet] No shadow root found or not accessible");
-        }
-        
-        setWidgetReady(true);
-      }, 2000);
-    };
-
-    script.onerror = (e) => {
-      console.error("[Recranet] SDK script failed to load:", e);
-      setSdkStatus("error");
-      setSdkError("Failed to load booking system. Please refresh the page.");
-      window.clearTimeout(timeoutId);
-    };
-
-    document.body.appendChild(script);
-    console.log("[Recranet] SDK script injected:", script.src);
-
-    return () => {
-      window.clearTimeout(timeoutId);
-      // Restore original base href when unmounting
-      const baseEl = document.querySelector('base');
-      if (baseEl) {
-        baseEl.setAttribute('href', '/');
-        console.log("[Recranet] Base href restored to /");
-      }
-    };
-  }, []);
-
-  // Load SDK on mount
-  useEffect(() => {
-    const cleanup = loadRecranetSDK(currentLang);
-    return cleanup;
-  }, []); // Only on mount
 
   // Handle language change with page reload for SDK
   const handleLangChange = (newLang: "nl" | "fr") => {
     if (newLang !== currentLang) {
-      // Update URL and reload to ensure correct SDK language
       const url = new URL(window.location.href);
       url.searchParams.set("lang", newLang);
       window.location.href = url.toString();
@@ -159,10 +45,7 @@ const BookingPage = () => {
       weekendMidweek: "Weekend of midweek",
       helpText: "Heeft u vragen over uw reservering? Neem gerust",
       contact: "contact",
-      withUs: "met ons op.",
-      loading: "Beschikbaarheid laden...",
-      error: "Er is een probleem opgetreden",
-      retry: "Probeer opnieuw"
+      withUs: "met ons op."
     },
     fr: {
       tagline: "Réservation",
@@ -176,10 +59,7 @@ const BookingPage = () => {
       weekendMidweek: "Week-end ou mi-semaine",
       helpText: "Avez-vous des questions sur votre réservation? N'hésitez pas à",
       contact: "nous contacter",
-      withUs: ".",
-      loading: "Chargement des disponibilités...",
-      error: "Un problème est survenu",
-      retry: "Réessayer"
+      withUs: "."
     }
   };
 
@@ -255,33 +135,9 @@ const BookingPage = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="bg-card rounded-md shadow-xl border border-border overflow-hidden"
           >
-            <div className="relative min-h-[600px]">
-              {/* Recranet element should exist in the DOM while the SDK initializes */}
+            <div className="min-h-[600px]">
+              {/* Recranet widget - SDK is loaded statically from index.html */}
               <recranet-accommodations className="recranet-element" />
-
-              {/* Loading overlay */}
-              {!widgetReady && sdkStatus !== "error" && sdkStatus !== "timeout" && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8 bg-background/80">
-                  <Loader2 className="w-12 h-12 text-brand-sage animate-spin" />
-                  <p className="font-sans text-muted-foreground">{t.loading}</p>
-                </div>
-              )}
-
-              {/* Error overlay */}
-              {(sdkStatus === "error" || sdkStatus === "timeout") && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8 bg-background/80">
-                  <Alert variant="destructive" className="max-w-md">
-                    <AlertTriangle className="h-4 w-4" />
-                    <AlertDescription>{sdkError || t.error}</AlertDescription>
-                  </Alert>
-                  <button
-                    onClick={() => loadRecranetSDK(currentLang)}
-                    className="mt-4 px-6 py-2 bg-brand-sage text-white rounded-md hover:bg-brand-sage/90 transition-colors font-sans text-sm"
-                  >
-                    {t.retry}
-                  </button>
-                </div>
-              )}
             </div>
           </motion.div>
 
