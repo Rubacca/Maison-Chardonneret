@@ -7,6 +7,7 @@ import { SocialProofSection } from "@/components/sections/SocialProofSection";
 import { FeatureCardsSection } from "@/components/sections/FeatureCardsSection";
 import { USPSection } from "@/components/sections/USPSection";
 import { LocationSection } from "@/components/sections/LocationSection";
+import { LangContext } from "@/contexts/LangContext";
 
 const LANG_STORAGE_KEY = "maison-chardonneret-lang";
 
@@ -22,16 +23,18 @@ const Index = () => {
   }, [currentLang]);
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar currentLang={currentLang} onLangChange={setCurrentLang} />
-      <HeroSection />
-      <IntroSection />
-      <SocialProofSection />
-      <FeatureCardsSection />
-      <USPSection />
-      <LocationSection />
-      <Footer currentLang={currentLang} onLangChange={setCurrentLang} />
-    </div>
+    <LangContext.Provider value={{ lang: currentLang, setLang: setCurrentLang }}>
+      <div className="min-h-screen bg-background">
+        <Navbar currentLang={currentLang} onLangChange={setCurrentLang} />
+        <HeroSection />
+        <IntroSection />
+        <SocialProofSection />
+        <FeatureCardsSection />
+        <USPSection />
+        <LocationSection />
+        <Footer currentLang={currentLang} onLangChange={setCurrentLang} />
+      </div>
+    </LangContext.Provider>
   );
 };
 
