@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/sections/HeroSection";
@@ -8,8 +8,18 @@ import { FeatureCardsSection } from "@/components/sections/FeatureCardsSection";
 import { USPSection } from "@/components/sections/USPSection";
 import { LocationSection } from "@/components/sections/LocationSection";
 
+const LANG_STORAGE_KEY = "maison-chardonneret-lang";
+
 const Index = () => {
-  const [currentLang, setCurrentLang] = useState<"nl" | "fr">("nl");
+  const [currentLang, setCurrentLang] = useState<"nl" | "fr">(() => {
+    const stored = localStorage.getItem(LANG_STORAGE_KEY);
+    return stored === "fr" ? "fr" : "nl";
+  });
+
+  useEffect(() => {
+    localStorage.setItem(LANG_STORAGE_KEY, currentLang);
+    document.documentElement.lang = currentLang;
+  }, [currentLang]);
 
   return (
     <div className="min-h-screen bg-background">

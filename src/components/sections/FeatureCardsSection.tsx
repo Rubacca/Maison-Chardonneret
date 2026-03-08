@@ -25,15 +25,16 @@ const FeatureCard = ({ title, description, image, index }: {
   image: string;
   index: number;
 }) => (
-  <motion.div
+  <motion.article
     initial={{ opacity: 0, y: 50 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-50px" }}
     transition={{ duration: 0.6, delay: index * 0.15 }}
     whileHover={{ y: -10 }}
-    className="group relative h-72 sm:h-80 md:h-96 rounded-md overflow-hidden cursor-pointer"
+    className="group relative h-72 sm:h-80 md:h-96 rounded-md overflow-hidden"
+    tabIndex={0}
+    aria-label={`${title}: ${description}`}
   >
-    {/* Background Image with Zoom Effect */}
     <div className="absolute inset-0 transition-transform duration-500 group-hover:scale-110">
       <img
         src={image}
@@ -43,22 +44,19 @@ const FeatureCard = ({ title, description, image, index }: {
       />
     </div>
     
-    {/* Gradient Overlay */}
     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
     
-    {/* Content */}
     <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 text-white">
       <h3 className="font-serif text-xl sm:text-2xl mb-2 group-hover:text-brand-cream transition-colors">
         {title}
       </h3>
-      <p className="font-sans text-xs sm:text-sm text-white/80 opacity-0 transform translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+      <p className="font-sans text-xs sm:text-sm text-white/80 opacity-0 transform translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 group-focus:opacity-100 group-focus:translate-y-0 transition-all duration-300">
         {description}
       </p>
     </div>
 
-    {/* Hover Border */}
-    <div className="absolute inset-0 border-2 border-transparent group-hover:border-brand-cream/30 rounded-md transition-colors duration-300" />
-  </motion.div>
+    <div className="absolute inset-0 border-2 border-transparent group-hover:border-brand-cream/30 group-focus:border-brand-cream/30 rounded-md transition-colors duration-300" />
+  </motion.article>
 );
 
 export const FeatureCardsSection = () => {

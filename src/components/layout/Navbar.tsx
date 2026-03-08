@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
@@ -25,7 +25,6 @@ export const Navbar = ({ currentLang, onLangChange }: NavbarProps) => {
   const location = useLocation();
   const { handleAnchorClick } = useSmoothScroll();
 
-  // Handle scroll state for navbar background
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -34,25 +33,40 @@ export const Navbar = ({ currentLang, onLangChange }: NavbarProps) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu on route change
   useEffect(() => {
     setIsOpen(false);
   }, [location.pathname]);
 
-  const isHomePage = location.pathname === "/";
+  // Close mobile menu on Escape
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) setIsOpen(false);
+    };
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [isOpen]);
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const isHomePage = location.pathname === "/";
+  const scrolledOrNotHome = isScrolled || !isHomePage;
+
+  const handleNavClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (href.startsWith("#")) {
       if (isHomePage) {
         handleAnchorClick(e, href);
       } else {
-        // Navigate to home page with hash
         e.preventDefault();
         window.location.href = "/" + href;
       }
       setIsOpen(false);
     }
-  };
+  }, [isHomePage, handleAnchorClick]);
+
+  const navLinkClass = (isExternal: boolean) =>
+    `font-sans text-sm transition-colors relative group ${
+      scrolledOrNotHome
+        ? "text-foreground/80 hover:text-foreground"
+        : "text-white/80 hover:text-white"
+    }`;
 
   return (
     <motion.header
@@ -60,21 +74,20 @@ export const Navbar = ({ currentLang, onLangChange }: NavbarProps) => {
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled || !isHomePage
+        scrolledOrNotHome
           ? "bg-background/95 backdrop-blur-md border-b border-border shadow-sm"
           : "bg-transparent"
       }`}
     >
       <Container>
-        <nav className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
+        <nav className="flex items-center justify-between h-16 md:h-20" aria-label="Hoofdnavigatie">
           <Link 
             to="/" 
             className="flex items-center gap-2"
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           >
             <span className={`font-serif text-xl md:text-2xl transition-colors ${
-              isScrolled || !isHomePage ? "text-foreground" : "text-white"
+              scrolledOrNotHome ? "text-foreground" : "text-white"
             }`}>
               Maison Chardonneret
             </span>
@@ -83,51 +96,33 @@ export const Navbar = ({ currentLang, onLangChange }: NavbarProps) => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
-              link.href.startsWith("/") ? (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className={`font-sans text-sm transition-colors relative group ${
-                    isScrolled || !isHomePage
-                      ? "text-foreground/80 hover:text-foreground"
-                      : "text-white/80 hover:text-white"
-                  }`}
-                >
-                  {link.label}
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-sage group-hover:w-full transition-all duration-300" />
-                </a>
-              ) : (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={(e) => handleNavClick(e, link.href)}
-                  className={`font-sans text-sm transition-colors relative group ${
-                    isScrolled || !isHomePage
-                      ? "text-foreground/80 hover:text-foreground"
-                      : "text-white/80 hover:text-white"
-                  }`}
-                >
-                  {link.label}
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-sage group-hover:w-full transition-all duration-300" />
-                </a>
-              )
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={link.href.startsWith("#") ? (e) => handleNavClick(e, link.href) : undefined}
+                className={navLinkClass(link.href.startsWith("/"))}
+              >
+                {link.label}
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-sage group-hover:w-full transition-all duration-300" />
+              </a>
             ))}
           </div>
 
           {/* Right side: Language toggle + CTA */}
           <div className="hidden md:flex items-center gap-4">
-            {/* Language Toggle */}
             <div className={`flex items-center gap-1 rounded-md p-1 ${
-              isScrolled || !isHomePage ? "bg-muted" : "bg-white/10"
-            }`}>
+              scrolledOrNotHome ? "bg-muted" : "bg-white/10"
+            }`} role="group" aria-label="Taalkeuze">
               <button
                 onClick={() => onLangChange("nl")}
+                aria-pressed={currentLang === "nl"}
+                aria-label="Nederlands"
                 className={`px-3 py-1 text-sm rounded-sm transition-colors ${
                   currentLang === "nl"
-                    ? isScrolled || !isHomePage
+                    ? scrolledOrNotHome
                       ? "bg-background text-foreground shadow-sm"
                       : "bg-white text-brand-dark shadow-sm"
-                    : isScrolled || !isHomePage
+                    : scrolledOrNotHome
                     ? "text-muted-foreground hover:text-foreground"
                     : "text-white/70 hover:text-white"
                 }`}
@@ -136,12 +131,14 @@ export const Navbar = ({ currentLang, onLangChange }: NavbarProps) => {
               </button>
               <button
                 onClick={() => onLangChange("fr")}
+                aria-pressed={currentLang === "fr"}
+                aria-label="Français"
                 className={`px-3 py-1 text-sm rounded-sm transition-colors ${
                   currentLang === "fr"
-                    ? isScrolled || !isHomePage
+                    ? scrolledOrNotHome
                       ? "bg-background text-foreground shadow-sm"
                       : "bg-white text-brand-dark shadow-sm"
-                    : isScrolled || !isHomePage
+                    : scrolledOrNotHome
                     ? "text-muted-foreground hover:text-foreground"
                     : "text-white/70 hover:text-white"
                 }`}
@@ -161,9 +158,10 @@ export const Navbar = ({ currentLang, onLangChange }: NavbarProps) => {
           <button
             onClick={() => setIsOpen(!isOpen)}
             className={`md:hidden p-2 ${
-              isScrolled || !isHomePage ? "text-foreground" : "text-white"
+              scrolledOrNotHome ? "text-foreground" : "text-white"
             }`}
-            aria-label="Toggle menu"
+            aria-label={isOpen ? "Menu sluiten" : "Menu openen"}
+            aria-expanded={isOpen}
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -179,35 +177,28 @@ export const Navbar = ({ currentLang, onLangChange }: NavbarProps) => {
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
             className="md:hidden bg-background/98 backdrop-blur-md border-t border-border"
+            role="dialog"
+            aria-label="Navigatiemenu"
           >
             <Container>
               <div className="py-6 space-y-4">
                 {navLinks.map((link) => (
-                  link.href.startsWith("/") ? (
-                    <a
-                      key={link.href}
-                      href={link.href}
-                      className="block font-sans text-foreground/80 hover:text-foreground py-2 text-lg"
-                    >
-                      {link.label}
-                    </a>
-                  ) : (
-                    <a
-                      key={link.href}
-                      href={link.href}
-                      onClick={(e) => handleNavClick(e, link.href)}
-                      className="block font-sans text-foreground/80 hover:text-foreground py-2 text-lg"
-                    >
-                      {link.label}
-                    </a>
-                  )
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    onClick={link.href.startsWith("#") ? (e) => handleNavClick(e, link.href) : undefined}
+                    className="block font-sans text-foreground/80 hover:text-foreground py-2 text-lg"
+                  >
+                    {link.label}
+                  </a>
                 ))}
                 
                 {/* Mobile Language Toggle */}
-                <div className="flex items-center gap-2 py-4 border-t border-border">
+                <div className="flex items-center gap-2 py-4 border-t border-border" role="group" aria-label="Taalkeuze">
                   <span className="text-sm text-muted-foreground">Taal:</span>
                   <button
                     onClick={() => onLangChange("nl")}
+                    aria-pressed={currentLang === "nl"}
                     className={`px-4 py-2 text-sm rounded-sm transition-colors ${
                       currentLang === "nl" ? "bg-brand-sage text-white" : "bg-muted text-foreground"
                     }`}
@@ -216,6 +207,7 @@ export const Navbar = ({ currentLang, onLangChange }: NavbarProps) => {
                   </button>
                   <button
                     onClick={() => onLangChange("fr")}
+                    aria-pressed={currentLang === "fr"}
                     className={`px-4 py-2 text-sm rounded-sm transition-colors ${
                       currentLang === "fr" ? "bg-brand-sage text-white" : "bg-muted text-foreground"
                     }`}
