@@ -1,13 +1,17 @@
 import { motion } from "framer-motion";
 import { MapPin, Phone, Mail } from "lucide-react";
 import { Container } from "@/components/layout/Container";
+import { useContent } from "@/hooks/useContent";
+import { useLang } from "@/contexts/LangContext";
 
 export const LocationSection = () => {
+  const { lang } = useLang();
+  const { getT } = useContent(lang);
+
   return (
     <section id="contact" className="py-16 sm:py-24 md:py-32 bg-background">
       <Container>
         <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
-          {/* Map Placeholder */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -24,7 +28,6 @@ export const LocationSection = () => {
             />
           </motion.div>
 
-          {/* Contact Info Card */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -34,16 +37,15 @@ export const LocationSection = () => {
           >
             <div>
               <span className="inline-block font-sans text-sm tracking-[0.2em] uppercase text-brand-sage mb-4">
-                Locatie
+                {getT("location", "label", "Locatie")}
               </span>
               <h2 className="font-serif text-2xl sm:text-3xl md:text-5xl text-foreground mb-4">
-                Vind ons in
+                {getT("location", "title_line1", "Vind ons in")}
                 <br />
-                <span className="italic text-brand-sage">Orchimont</span>
+                <span className="italic text-brand-sage">{getT("location", "title_line2", "Orchimont")}</span>
               </h2>
               <p className="font-sans text-sm sm:text-base text-muted-foreground leading-relaxed max-w-md">
-                Gelegen in het hart van de Belgische Ardennen, op slechts 2 uur 
-                rijden van Brussel, Antwerpen en de Nederlandse grens.
+                {getT("location", "description", "Gelegen in het hart van de Belgische Ardennen, op slechts 2 uur rijden van Brussel, Antwerpen en de Nederlandse grens.")}
               </p>
             </div>
 
@@ -53,10 +55,9 @@ export const LocationSection = () => {
                   <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-brand-sage" />
                 </div>
                 <div>
-                  <h4 className="font-sans font-medium text-sm sm:text-base text-foreground">Adres</h4>
-                  <p className="font-sans text-xs sm:text-sm text-muted-foreground">
-                    Rue du Chardonneret<br />
-                    5560 Orchimont, België
+                  <h4 className="font-sans font-medium text-sm sm:text-base text-foreground">{getT("location", "address_label", "Adres")}</h4>
+                  <p className="font-sans text-xs sm:text-sm text-muted-foreground whitespace-pre-line">
+                    {getT("location", "address", "Rue du Chardonneret\n5560 Orchimont, België")}
                   </p>
                 </div>
               </div>
@@ -66,9 +67,9 @@ export const LocationSection = () => {
                   <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-brand-sage" />
                 </div>
                 <div>
-                  <h4 className="font-sans font-medium text-sm sm:text-base text-foreground">Telefoon</h4>
+                  <h4 className="font-sans font-medium text-sm sm:text-base text-foreground">{getT("location", "phone_label", "Telefoon")}</h4>
                   <p className="font-sans text-xs sm:text-sm text-muted-foreground">
-                    +32 (0)XX XXX XX XX
+                    {getT("location", "phone", "+32 (0)XX XXX XX XX")}
                   </p>
                 </div>
               </div>
@@ -78,9 +79,9 @@ export const LocationSection = () => {
                   <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-brand-sage" />
                 </div>
                 <div>
-                  <h4 className="font-sans font-medium text-sm sm:text-base text-foreground">E-mail</h4>
+                  <h4 className="font-sans font-medium text-sm sm:text-base text-foreground">{getT("location", "email_label", "E-mail")}</h4>
                   <p className="font-sans text-xs sm:text-sm text-muted-foreground">
-                    info@maison-chardonneret.be
+                    {getT("location", "email", "info@maison-chardonneret.be")}
                   </p>
                 </div>
               </div>

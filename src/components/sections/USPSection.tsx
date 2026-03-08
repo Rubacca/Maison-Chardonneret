@@ -1,29 +1,10 @@
 import { motion } from "framer-motion";
 import { Armchair, Leaf, Trees, WifiOff } from "lucide-react";
 import { Container } from "@/components/layout/Container";
+import { useContent } from "@/hooks/useContent";
+import { useLang } from "@/contexts/LangContext";
 
-const usps = [
-  {
-    icon: Armchair,
-    title: "Brocante Stijl",
-    description: "Authentiek ingericht met zorgvuldig geselecteerde vintage meubelen",
-  },
-  {
-    icon: Leaf,
-    title: "Energiezuinig",
-    description: "Duurzaam verblijf met moderne isolatie en groene energie",
-  },
-  {
-    icon: Trees,
-    title: "In de Natuur",
-    description: "Omringd door bossen, weilanden en rustige wandelpaden",
-  },
-  {
-    icon: WifiOff,
-    title: "Offline Gaan",
-    description: "Ontkoppel van de drukte en herontdek de eenvoud",
-  },
-];
+const icons = [Armchair, Leaf, Trees, WifiOff];
 
 const USPCard = ({ icon: Icon, title, description, index }: {
   icon: typeof Armchair;
@@ -50,13 +31,30 @@ const USPCard = ({ icon: Icon, title, description, index }: {
   </motion.div>
 );
 
+const fallbackUsps = [
+  { title: "Brocante Stijl", description: "Authentiek ingericht met zorgvuldig geselecteerde vintage meubelen" },
+  { title: "Energiezuinig", description: "Duurzaam verblijf met moderne isolatie en groene energie" },
+  { title: "In de Natuur", description: "Omringd door bossen, weilanden en rustige wandelpaden" },
+  { title: "Offline Gaan", description: "Ontkoppel van de drukte en herontdek de eenvoud" },
+];
+
 export const USPSection = () => {
+  const { lang } = useLang();
+  const { getT } = useContent(lang);
+
+  const usps = [
+    { icon: icons[0], title: getT("usps", "usp1_title", fallbackUsps[0].title), description: getT("usps", "usp1_description", fallbackUsps[0].description) },
+    { icon: icons[1], title: getT("usps", "usp2_title", fallbackUsps[1].title), description: getT("usps", "usp2_description", fallbackUsps[1].description) },
+    { icon: icons[2], title: getT("usps", "usp3_title", fallbackUsps[2].title), description: getT("usps", "usp3_description", fallbackUsps[2].description) },
+    { icon: icons[3], title: getT("usps", "usp4_title", fallbackUsps[3].title), description: getT("usps", "usp4_description", fallbackUsps[3].description) },
+  ];
+
   return (
     <section className="py-12 sm:py-16 md:py-20 bg-muted">
       <Container>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
           {usps.map((usp, index) => (
-            <USPCard key={usp.title} {...usp} index={index} />
+            <USPCard key={index} {...usp} index={index} />
           ))}
         </div>
       </Container>
