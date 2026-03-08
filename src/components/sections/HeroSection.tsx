@@ -10,18 +10,20 @@ export const HeroSection = () => {
     <section
       id="home"
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      role="banner"
+      aria-label="Welkom bij Maison Chardonneret Elegant"
     >
-      {/* Background Image Placeholder */}
+      {/* Background Image */}
       <div className="absolute inset-0 z-0">
-        <div 
-          className="w-full h-full bg-cover bg-center bg-no-repeat scale-105"
-          style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop')`,
-          }}
+        <img
+          src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop"
+          alt=""
+          aria-hidden="true"
+          className="w-full h-full object-cover scale-105"
+          fetchPriority="high"
+          loading="eager"
         />
-        {/* Dark Overlay */}
         <div className="absolute inset-0 bg-black/40" />
-        {/* Gradient Overlay for depth */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
       </div>
 
@@ -76,12 +78,13 @@ export const HeroSection = () => {
         </motion.div>
       </div>
 
-      {/* Scroll Indicator - Hidden on mobile */}
+      {/* Scroll Indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 1 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 hidden sm:block"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 hidden sm:block motion-reduce:hidden"
+        aria-hidden="true"
       >
         <motion.div
           animate={{ y: [0, 10, 0] }}

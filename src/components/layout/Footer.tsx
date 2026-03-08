@@ -21,7 +21,7 @@ export const Footer = ({ currentLang, onLangChange }: FooterProps) => {
   const { handleAnchorClick } = useSmoothScroll();
 
   return (
-    <footer className="bg-brand-dark text-white">
+    <footer className="bg-brand-dark text-white" role="contentinfo">
       <Container>
         <div className="py-12 sm:py-16 md:py-20">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12">
@@ -39,22 +39,20 @@ export const Footer = ({ currentLang, onLangChange }: FooterProps) => {
                 Tijdloze rust in het hart van de Ardennen. Een authentieke 
                 vakantiewoning voor het hele gezin.
               </p>
-              {/* Social Links */}
+              {/* Social Links - hidden until real URLs are available */}
               <div className="flex gap-3">
-                <a
-                  href="#"
-                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-sage transition-colors"
-                  aria-label="Instagram"
+                <span
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 flex items-center justify-center opacity-50 cursor-default"
+                  aria-label="Instagram (binnenkort beschikbaar)"
                 >
                   <Instagram size={16} className="sm:w-[18px] sm:h-[18px]" />
-                </a>
-                <a
-                  href="#"
-                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-sage transition-colors"
-                  aria-label="Facebook"
+                </span>
+                <span
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 flex items-center justify-center opacity-50 cursor-default"
+                  aria-label="Facebook (binnenkort beschikbaar)"
                 >
                   <Facebook size={16} className="sm:w-[18px] sm:h-[18px]" />
-                </a>
+                </span>
               </div>
             </motion.div>
 
@@ -111,12 +109,6 @@ export const Footer = ({ currentLang, onLangChange }: FooterProps) => {
                   </span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <Phone size={16} className="text-brand-sage flex-shrink-0 sm:w-[18px] sm:h-[18px]" />
-                  <span className="font-sans text-xs sm:text-sm text-white/70">
-                    +32 (0)XX XXX XX XX
-                  </span>
-                </li>
-                <li className="flex items-center gap-3">
                   <Mail size={16} className="text-brand-sage flex-shrink-0 sm:w-[18px] sm:h-[18px]" />
                   <span className="font-sans text-xs sm:text-sm text-white/70">
                     info@maison-chardonneret.be
@@ -135,9 +127,10 @@ export const Footer = ({ currentLang, onLangChange }: FooterProps) => {
               <h4 className="font-sans font-medium text-xs sm:text-sm tracking-wider uppercase mb-4 sm:mb-6">
                 Taal / Langue
               </h4>
-              <div className="flex gap-2">
+              <div className="flex gap-2" role="group" aria-label="Taalkeuze">
                 <button
                   onClick={() => onLangChange("nl")}
+                  aria-pressed={currentLang === "nl"}
                   className={`px-3 sm:px-4 py-2 text-xs sm:text-sm rounded-sm transition-colors ${
                     currentLang === "nl"
                       ? "bg-brand-sage text-white"
@@ -148,6 +141,7 @@ export const Footer = ({ currentLang, onLangChange }: FooterProps) => {
                 </button>
                 <button
                   onClick={() => onLangChange("fr")}
+                  aria-pressed={currentLang === "fr"}
                   className={`px-3 sm:px-4 py-2 text-xs sm:text-sm rounded-sm transition-colors ${
                     currentLang === "fr"
                       ? "bg-brand-sage text-white"
@@ -167,14 +161,6 @@ export const Footer = ({ currentLang, onLangChange }: FooterProps) => {
             <p className="font-sans text-[10px] sm:text-xs text-white/50 text-center sm:text-left">
               © {new Date().getFullYear()} Maison Chardonneret Elegant. Alle rechten voorbehouden.
             </p>
-            <div className="flex gap-4 sm:gap-6">
-              <a href="#" className="font-sans text-[10px] sm:text-xs text-white/50 hover:text-white/70 transition-colors">
-                Privacy Policy
-              </a>
-              <a href="#" className="font-sans text-[10px] sm:text-xs text-white/50 hover:text-white/70 transition-colors">
-                Algemene Voorwaarden
-              </a>
-            </div>
           </div>
         </div>
       </Container>

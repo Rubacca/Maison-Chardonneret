@@ -12,3 +12,5 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+Sitemap: https://prompt-craft-08.lovable.app/sitemap.xml
