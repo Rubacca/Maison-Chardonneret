@@ -15,30 +15,13 @@ export const LocationSection = () => {
             transition={{ duration: 0.8 }}
             className="relative h-[300px] sm:h-[400px] lg:h-[500px] rounded-md overflow-hidden shadow-xl order-2 lg:order-1"
           >
-            {/* Map background image as placeholder */}
-            <img
-              src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1474&auto=format&fit=crop"
-              alt="Kaart locatie Orchimont"
-              className="w-full h-full object-cover"
+            <iframe
+              src="https://www.openstreetmap.org/export/embed.html?bbox=4.90%2C49.87%2C4.97%2C49.90&layer=mapnik&marker=49.8833%2C4.9333"
+              className="w-full h-full border-0"
               loading="lazy"
+              title="Locatie Maison Chardonneret Elegant in Orchimont"
+              allowFullScreen
             />
-            <div className="absolute inset-0 bg-brand-dark/20" />
-            
-            {/* Location Pin Overlay */}
-            <motion.div
-              initial={{ scale: 0 }}
-              whileInView={{ scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.5, type: "spring" }}
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-            >
-              <div className="relative">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-brand-sage rounded-full flex items-center justify-center shadow-lg">
-                  <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                </div>
-                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 sm:w-3 sm:h-3 bg-brand-sage rotate-45" />
-              </div>
-            </motion.div>
           </motion.div>
 
           {/* Contact Info Card */}
