@@ -55,8 +55,8 @@ export const IntroSection = () => {
               className="absolute top-0 right-0 w-[75%] sm:w-3/4 h-[60%] sm:h-2/3 rounded-md overflow-hidden shadow-2xl"
             >
               <img
-                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1470&auto=format&fit=crop"
-                alt="Interieur van het vakantiehuis"
+                src="/images/huiskamer-interieur.jpg"
+                alt="Authentieke huiskamer van het vakantiehuis"
                 className="w-full h-full object-cover"
                 loading="lazy"
               />
@@ -69,8 +69,8 @@ export const IntroSection = () => {
               className="absolute bottom-0 left-0 w-[65%] sm:w-2/3 h-[45%] sm:h-1/2 rounded-md overflow-hidden shadow-2xl border-4 border-background"
             >
               <img
-                src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=1470&auto=format&fit=crop"
-                alt="Gezellige woonkamer"
+                src="/images/keuken-interieur.jpg"
+                alt="Authentieke keuken in brocante stijl"
                 className="w-full h-full object-cover"
                 loading="lazy"
               />

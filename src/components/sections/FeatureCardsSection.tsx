@@ -5,17 +5,17 @@ const features = [
   {
     title: "Het Vakantiehuis",
     description: "Authentieke brocante charme met modern comfort",
-    image: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1474&auto=format&fit=crop",
+    image: "/images/serre-uitzicht.jpg",
   },
   {
     title: "De Omgeving",
     description: "Genesteld in de groene heuvels van de Ardennen",
-    image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1471&auto=format&fit=crop",
+    image: "/images/bossen-ardennen.jpg",
   },
   {
-    title: "Activiteiten",
-    description: "Wandelen, fietsen, kayakken en meer",
-    image: "https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=1470&auto=format&fit=crop",
+    title: "Brocante Sfeer",
+    description: "Zorgvuldig geselecteerde details en een warm welkomstpakket",
+    image: "/images/welkomstpakket.jpg",
   },
 ];
 
