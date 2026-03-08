@@ -14,16 +14,132 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      reviews: {
+        Row: {
+          author: string
+          country: string
+          created_at: string
+          id: string
+          sort_order: number
+          text_fr: string
+          text_nl: string
+          updated_at: string
+          visible: boolean
+        }
+        Insert: {
+          author: string
+          country?: string
+          created_at?: string
+          id?: string
+          sort_order?: number
+          text_fr?: string
+          text_nl?: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Update: {
+          author?: string
+          country?: string
+          created_at?: string
+          id?: string
+          sort_order?: number
+          text_fr?: string
+          text_nl?: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Relationships: []
+      }
+      site_content: {
+        Row: {
+          id: string
+          key: string
+          section: string
+          updated_at: string
+          value_fr: string
+          value_nl: string
+        }
+        Insert: {
+          id?: string
+          key: string
+          section: string
+          updated_at?: string
+          value_fr?: string
+          value_nl?: string
+        }
+        Update: {
+          id?: string
+          key?: string
+          section?: string
+          updated_at?: string
+          value_fr?: string
+          value_nl?: string
+        }
+        Relationships: []
+      }
+      site_images: {
+        Row: {
+          alt_fr: string
+          alt_nl: string
+          id: string
+          key: string
+          section: string
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          alt_fr?: string
+          alt_nl?: string
+          id?: string
+          key: string
+          section: string
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          alt_fr?: string
+          alt_nl?: string
+          id?: string
+          key?: string
+          section?: string
+          updated_at?: string
+          url?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +266,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
