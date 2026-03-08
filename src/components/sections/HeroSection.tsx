@@ -16,7 +16,7 @@ export const HeroSection = () => {
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <img
-          src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop"
+          src="/images/gevel-exterior.jpg"
           alt=""
           aria-hidden="true"
           className="w-full h-full object-cover scale-105"
