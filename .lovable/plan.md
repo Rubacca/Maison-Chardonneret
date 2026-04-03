@@ -1,62 +1,55 @@
 
 
-## Plan: Improve Booking Page Based on Commandeurshuisje Reference
+## Plan: Match Booking Page to Commandeurshuisje Reference
 
-### Analysis
+### Root Cause
 
-The Commandeurshuisje.nl reference site uses the **same Recranet widget** but integrates it far more cleanly. Key differences:
+The Recranet widget uses **Shadow DOM** (web components). All CSS selectors targeting internal classes like `.mat-mdc-raised-button`, `.mat-calendar-body-selected`, `.mdc-tab-indicator__content--underline` etc. **cannot penetrate the shadow boundary** and are completely ignored by the browser. Only CSS custom properties (`--recranet-primary` etc.) cross shadow DOM. This is why the page looks nothing like the reference despite all the CSS overrides.
 
-1. **They don't fight the widget** -- minimal CSS overrides, letting the Recranet Angular widget handle its own layout (photo grid, tabs, calendars, booking sidebar, reviews)
-2. **Tab navigation** -- Details, Voorzieningen, Beschikbaarheid, Arrangementen, Locatie, Reviews tabs are native widget elements, not custom additions
-3. **No duplicate content** -- No custom hero/quick-info bar duplicating what the widget already shows (accommodation name, guest count, rooms, etc.)
-4. **Sticky booking panel** -- The widget's native booking sidebar works correctly because layout CSS isn't overridden
-5. **Fallback hidden when widget loads** -- Only shown as a true fallback
+### What the Reference Does Right
 
-### Current Problems
+From the screenshot of commandeurshuisje.nl:
 
-The current `public/boeken/index.html` has ~450 lines of aggressive `!important` CSS overrides targeting Angular Material classes, gallery layouts, calendar grids, form fields, tabs, and more. These overrides:
-- Break the widget's responsive behavior
-- Conflict with Angular Material's internal layout engine
-- Force grid layouts that don't match the widget's DOM structure
-- Make the page look "off" compared to native Recranet rendering
+1. **White/light background** throughout -- the page background matches the widget's internal white, creating a seamless look
+2. **Light, elegant hero** -- "RESERVEREN" tagline in spaced caps, large serif "Boek uw verblijf" title, subtle description, all on a light/white background (not a dark banner)
+3. **No CSS overrides** -- they only set CSS custom properties on the host element and let the widget handle everything else
+4. **Clean, minimal header** -- centered logo, hamburger menu on left, lang toggle and CTA button on right
+5. **Widget fills the page** -- no extra padding or containers constraining it
 
-### Changes
+### Changes to `public/boeken/index.html`
 
-**File: `public/boeken/index.html`**
+**1. Remove all dead CSS (lines 287-348)**
+Delete every rule targeting shadow DOM internals: `.mat-mdc-raised-button`, `.mat-mdc-outlined-button`, `.mat-mdc-tab-indicator`, `.mat-calendar-body-selected`, `.mat-calendar-body-in-range`, `.mdc-line-ripple`, `h1/h2/h3` inside the widget, and `recranet-search-bar/basket/summary` rules. These have zero effect.
 
-1. **Strip layout-forcing CSS overrides** -- Remove all `!important` rules that override grid layouts, flex directions, calendar sizing, gallery grids, accommodation card layouts, and form field styling. Keep only:
-   - Brand color CSS custom properties (`--recranet-primary`, etc.)
-   - Font family declarations (Playfair Display for headings, Inter for body)
-   - Button color overrides (sage green)
-   - Tab indicator color
-   - Basic border/radius theming
+**2. Switch background to white**
+Change `body` background from `#FAF8F5` (cream) to `#FFFFFF` to seamlessly blend with the widget's white internal background.
 
-2. **Simplify the hero section** -- Reduce to a minimal banner (tagline + title only, remove subtitle) or remove entirely since the widget shows the accommodation name and description natively
+**3. Redesign hero to match reference**
+Replace the dark (`#3A3A3A`) hero banner with a light/white section:
+- Spaced uppercase tagline in muted color
+- Large serif title
+- Optional subtle description line
+- More vertical padding, matching the reference's elegant spacing
 
-3. **Remove the quick-info bar** -- The widget already displays guest count, rooms, and location in its Details tab
+**4. Keep only CSS custom properties on widget host**
+The `recranet-accommodations` element keeps `--recranet-primary: #8B9D83` and font-family. Remove all other properties that don't actually work.
 
-4. **Hide fallback conditionally** -- Add JavaScript to hide the fallback section once the Recranet widget renders successfully (check for content inside `recranet-accommodations` after a timeout)
+**5. Add "BOEK" CTA button to header**
+Like the reference, add a prominent booking CTA button styled in brand sage color next to the language toggle.
 
-5. **Let the widget breathe** -- Remove padding/margin constraints on `.widget-section` and `.widget-container`, give the widget full width with a max-width container matching the reference (~1200px centered)
+**6. Full-width widget container**
+Remove `max-width: 1200px` from `.widget-section` -- let the widget manage its own internal max-width like the reference does.
 
-6. **Preserve only color theming** -- The Recranet widget supports CSS custom properties. Set brand colors and let the widget handle the rest:
-   ```css
-   recranet-accommodations {
-     --recranet-primary: #8B9D83;
-     font-family: 'Inter', sans-serif;
-   }
-   ```
-
-### Technical Summary
+### Summary
 
 | Area | Action |
 |------|--------|
-| CSS overrides | Remove ~300 lines of layout-forcing `!important` rules |
-| Color theming | Keep ~30 lines of brand color/font declarations |
-| Hero section | Simplify to minimal banner |
-| Quick-info bar | Remove (widget shows this natively) |
-| Fallback section | Hide when widget loads via JS |
-| Widget container | Max-width 1200px, centered, no padding constraints |
+| Dead CSS | Remove ~60 lines of shadow-DOM-blocked overrides |
+| Background | White (`#FFF`) instead of cream |
+| Hero | Light/elegant instead of dark banner |
+| Widget host | Keep only CSS custom properties |
+| Header | Add "BOEK" CTA button |
+| Widget container | Full-width, no constraining max-width |
 
-This will make the booking page render identically to the Commandeurshuisje reference -- clean, native Recranet widget behavior with brand-appropriate colors and fonts.
+Single file change: `public/boeken/index.html`
 
