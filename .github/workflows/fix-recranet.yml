@@ -15,22 +15,22 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       
-      - name: Setup Node.js
+      - name: Setup Node.js 24
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '24'
           cache: 'npm'
       
       - name: Install dependencies
         run: npm ci
       
-      - name: Check for Recranet CSS issues
+      - name: Create Recranet CSS fix file
         run: |
-          if [ ! -f "src/styles/recranet-fix.css" ]; then
-            echo "Creating Recranet CSS fix file..."
-            mkdir -p src/styles
-            cat > src/styles/recranet-fix.css << 'EOF'
+          mkdir -p src/styles
+          cat > src/styles/recranet-fix.css << 'CSSEOF'
           /* Prevent Tailwind from affecting Recranet */
           .recranet-isolated-section,
           .recranet-isolated-section *,
@@ -45,25 +45,34 @@ jobs:
             width: 100% !important;
             overflow: visible !important;
           }
-          EOF
-          fi
+          CSSEOF
+          echo "✅ CSS file created"
       
-      - name: Check main.tsx imports
+      - name: Add CSS import to main.tsx
         run: |
           if ! grep -q "recranet-fix.css" src/main.tsx; then
-            echo "Adding CSS import to main.tsx..."
-            sed -i "1i import './styles/recranet-fix.css'" src/main.tsx
+            sed -i "1i import './styles/recranet-fix.css';" src/main.tsx
+            echo "✅ CSS import added to main.tsx"
+          else
+            echo "ℹ️  CSS import already exists"
           fi
       
-      - name: Build to verify no errors
-        run: npm run build || true
+      - name: Build project
+        run: npm run build
+        continue-on-error: true
       
-      - name: Commit fixes
+      - name: Configure git
         run: |
-          git config user.email "claude-bot@anthropic.com"
-          git config user.name "Claude Bot"
+          git config --local user.email "claude-bot@anthropic.com"
+          git config --local user.name "Claude Auto-Fix Bot"
+      
+      - name: Commit and push changes
+        run: |
           git add -A
           if ! git diff --cached --quiet; then
             git commit -m "🎨 Auto-fix: Recranet CSS isolation"
-            git push
+            git push origin main
+            echo "✅ Changes pushed to GitHub"
+          else
+            echo "ℹ️  No changes to commit"
           fi
