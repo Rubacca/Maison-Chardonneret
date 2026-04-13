@@ -41,7 +41,7 @@ export const IntroSection = () => {
               <div className="space-y-1">
                 <span className="font-serif text-2xl sm:text-3xl text-foreground">{getT("intro", "stat_bedrooms", "2")}</span>
                 <p className="text-xs sm:text-sm text-muted-foreground">{getT("intro", "stat_bedrooms_label", "Slaapkamers")}</p>
-                <p className="text-[10px] sm:text-xs text-brand-sage">{getT("intro", "stat_bedrooms_sub", "+1 tussenkamer")}</p>
+                <p className="text-[10px] sm:text-xs text-brand-sage">{getT("intro", "stat_bedrooms_sub", "+1 tussenkamer met bedbank op aanvraag")}</p>
               </div>
               <div className="w-px bg-border hidden sm:block" />
               <div className="space-y-1">
@@ -50,8 +50,8 @@ export const IntroSection = () => {
               </div>
               <div className="w-px bg-border hidden sm:block" />
               <div className="space-y-1">
-                <span className="font-serif text-2xl sm:text-3xl text-foreground">{getT("intro", "stat_toilet", "1")}</span>
-                <p className="text-xs sm:text-sm text-muted-foreground">{getT("intro", "stat_toilet_label", "Extra toilet")}</p>
+                <span className="font-serif text-2xl sm:text-3xl text-foreground">{getT("intro", "stat_toilet", "2")}</span>
+                <p className="text-xs sm:text-sm text-muted-foreground">{getT("intro", "stat_toilet_label", "Toiletten")}</p>
               </div>
             </div>
           </motion.div>
