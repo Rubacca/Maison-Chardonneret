@@ -31,27 +31,24 @@ export const IntroSection = () => {
             <p className="font-sans text-base sm:text-lg text-muted-foreground leading-relaxed max-w-lg">
               {getT("intro", "description", "Ontdek onze charmante gîte voor 4 personen, ingericht in stijlvolle brocante sfeer in het pittoreske Orchimont. Met een optionele slaapbank in de tussenkamer is er ruimte voor maximaal 6 gasten — in overleg.")}
             </p>
-            <div className="flex flex-wrap gap-6 sm:gap-8 pt-4">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-8 bg-brand-cream/50 rounded-lg p-6">
               <div className="space-y-1">
-                <span className="font-serif text-2xl sm:text-3xl text-foreground">{getT("intro", "stat_persons", "4")}</span>
-                <p className="text-xs sm:text-sm text-muted-foreground">{getT("intro", "stat_persons_label", "Gasten")}</p>
-                <p className="text-[10px] sm:text-xs text-brand-sage">{getT("intro", "stat_persons_sub", "+2 op aanvraag")}</p>
+                <span className="font-serif text-3xl md:text-4xl text-foreground">{getT("intro", "stat_persons", "4")}</span>
+                <p className="text-sm font-medium text-muted-foreground">{getT("intro", "stat_persons_label", "Gasten")}</p>
+                <p className="text-xs text-brand-sage italic">{getT("intro", "stat_persons_sub", "+2 op aanvraag")}</p>
               </div>
-              <div className="w-px bg-border hidden sm:block" />
-              <div className="space-y-1">
-                <span className="font-serif text-2xl sm:text-3xl text-foreground">{getT("intro", "stat_bedrooms", "2")}</span>
-                <p className="text-xs sm:text-sm text-muted-foreground">{getT("intro", "stat_bedrooms_label", "Slaapkamers")}</p>
-                <p className="text-[10px] sm:text-xs text-brand-sage">{getT("intro", "stat_bedrooms_sub", "+1 tussenkamer met bedbank op aanvraag")}</p>
+              <div className="space-y-1 border-l-2 border-brand-sage/30 pl-4">
+                <span className="font-serif text-3xl md:text-4xl text-foreground">{getT("intro", "stat_bedrooms", "2")}</span>
+                <p className="text-sm font-medium text-muted-foreground">{getT("intro", "stat_bedrooms_label", "Slaapkamers")}</p>
+                <p className="text-xs text-brand-sage italic">{getT("intro", "stat_bedrooms_sub", "+1 tussenkamer met bedbank op aanvraag")}</p>
               </div>
-              <div className="w-px bg-border hidden sm:block" />
-              <div className="space-y-1">
-                <span className="font-serif text-2xl sm:text-3xl text-foreground">{getT("intro", "stat_bathrooms", "1")}</span>
-                <p className="text-xs sm:text-sm text-muted-foreground">{getT("intro", "stat_bathrooms_label", "Badkamer")}</p>
+              <div className="space-y-1 border-l-2 border-brand-sage/30 pl-4 max-sm:border-l-0 max-sm:pl-0">
+                <span className="font-serif text-3xl md:text-4xl text-foreground">{getT("intro", "stat_bathrooms", "1")}</span>
+                <p className="text-sm font-medium text-muted-foreground">{getT("intro", "stat_bathrooms_label", "Badkamer")}</p>
               </div>
-              <div className="w-px bg-border hidden sm:block" />
-              <div className="space-y-1">
-                <span className="font-serif text-2xl sm:text-3xl text-foreground">{getT("intro", "stat_toilet", "2")}</span>
-                <p className="text-xs sm:text-sm text-muted-foreground">{getT("intro", "stat_toilet_label", "Toiletten")}</p>
+              <div className="space-y-1 border-l-2 border-brand-sage/30 pl-4">
+                <span className="font-serif text-3xl md:text-4xl text-foreground">{getT("intro", "stat_toilet", "2")}</span>
+                <p className="text-sm font-medium text-muted-foreground">{getT("intro", "stat_toilet_label", "Toiletten")}</p>
               </div>
             </div>
           </motion.div>
