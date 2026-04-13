@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="/boeken/" />
     <title>Reserveren | Maison Chardonneret Elegant</title>
-    <meta name="description" content="Boek uw verblijf bij Maison Chardonneret Elegant - een authentieke gîte voor 10 personen in brocante stijl, genesteld in de prachtige Ardennen te Orchimont." />
+    <meta name="description" content="Boek uw verblijf bij Maison Chardonneret Elegant - een authentieke gîte voor 4 personen in brocante stijl, genesteld in de prachtige Ardennen te Orchimont." />
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -133,7 +133,6 @@
         background: #FFFFFF;
         padding: 3.5rem 1.5rem 2.5rem;
         text-align: center;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
       }
       
       .hero-container { max-width: 600px; margin: 0 auto; }
@@ -162,6 +161,12 @@
         font-weight: 300;
       }
       
+      /* Widget container */
+      #widget {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
       /* Widget — only CSS custom properties (cross shadow DOM) */
       recranet-accommodations {
         display: block;
@@ -173,6 +178,7 @@
       
       /* Fallback */
       .fallback-section {
+        display: none;
         text-align: center;
         padding: 3rem 2rem;
         background: rgba(139, 157, 131, 0.06);
@@ -180,7 +186,7 @@
         margin: 2rem 1.5rem;
       }
       
-      .fallback-section.hidden { display: none; }
+      .fallback-section.visible { display: block; }
       
       .fallback-text {
         font-size: 0.875rem;
@@ -316,7 +322,7 @@
         <div class="hero-container">
           <p class="hero-tagline" id="hero-tagline">Reserveer uw verblijf</p>
           <h1 class="hero-title" id="hero-title">Boek uw verblijf</h1>
-          <p class="hero-subtitle" id="hero-subtitle">Maison Chardonneret Elegant · Orchimont, Ardennen</p>
+          <p class="hero-subtitle" id="hero-subtitle">Kies uw gewenste periode en rond uw boeking direct af.</p>
         </div>
       </section>
       
@@ -330,10 +336,6 @@
           </a>
         </div>
         
-        <div class="help-text">
-          <span id="help-text">Vragen over uw reservering? </span>
-          <a href="/#contact" class="help-link" id="help-link">Neem contact op</a>
-        </div>
       </section>
     </main>
     
@@ -341,7 +343,7 @@
       <div class="footer-container">
         <div>
           <h3 class="footer-brand">Maison Chardonneret</h3>
-          <p class="footer-desc" id="footer-desc">Tijdloze rust in het hart van de Ardennen. Een authentieke vakantiewoning voor het hele gezin.</p>
+          <p class="footer-desc" id="footer-desc">Tijdloze rust in het hart van de Ardennen. Een authentieke vakantiewoning voor 4 personen.</p>
         </div>
         <div>
           <h4 class="footer-title" id="footer-nav-title">Navigatie</h4>
@@ -366,13 +368,11 @@
         nl: {
           heroTagline: 'Reserveer uw verblijf',
           heroTitle: 'Boek uw verblijf',
-          heroSubtitle: 'Maison Chardonneret Elegant · Orchimont, Ardennen',
+          heroSubtitle: 'Kies uw gewenste periode en rond uw boeking direct af.',
           ctaBtn: 'BOEK',
           fallbackText: 'Widget niet zichtbaar? Boek direct via ons reserveringsportaal:',
           fallbackBtn: 'Direct boeken →',
-          helpText: 'Vragen over uw reservering? ',
-          helpLink: 'Neem contact op',
-          footerDesc: 'Tijdloze rust in het hart van de Ardennen. Een authentieke vakantiewoning voor het hele gezin.',
+          footerDesc: 'Tijdloze rust in het hart van de Ardennen. Een authentieke vakantiewoning voor 4 personen.',
           footerNavTitle: 'Navigatie',
           footerLinkHouse: 'Het Huis',
           footerLinkArea: 'Omgeving',
@@ -382,13 +382,11 @@
         fr: {
           heroTagline: 'Réservez votre séjour',
           heroTitle: 'Réservez votre séjour',
-          heroSubtitle: 'Maison Chardonneret Elegant · Orchimont, Ardennes',
+          heroSubtitle: 'Choisissez votre période et finalisez votre réservation.',
           ctaBtn: 'RÉSERVER',
           fallbackText: 'Widget invisible? Réservez directement via notre portail:',
           fallbackBtn: 'Réserver directement →',
-          helpText: 'Questions sur votre réservation? ',
-          helpLink: 'Contactez-nous',
-          footerDesc: 'Sérénité intemporelle au cœur des Ardennes. Un gîte authentique pour toute la famille.',
+          footerDesc: 'Sérénité intemporelle au cœur des Ardennes. Un gîte authentique pour 4 personnes.',
           footerNavTitle: 'Navigation',
           footerLinkHouse: 'La Maison',
           footerLinkArea: 'Environs',
@@ -406,8 +404,6 @@
         document.getElementById('fallback-text').textContent = t.fallbackText;
         document.getElementById('fallback-btn').textContent = t.fallbackBtn;
         document.getElementById('fallback-link').href = t.portalUrl;
-        document.getElementById('help-text').textContent = t.helpText;
-        document.getElementById('help-link').textContent = t.helpLink;
         document.getElementById('footer-desc').textContent = t.footerDesc;
         document.getElementById('footer-nav-title').textContent = t.footerNavTitle;
         document.getElementById('footer-link-house').textContent = t.footerLinkHouse;
@@ -426,9 +422,7 @@
       
       function checkWidgetLoaded() {
         var widget = document.querySelector('recranet-accommodations');
-        if (widget && widget.shadowRoot && widget.shadowRoot.childElementCount > 0) {
-          document.getElementById('fallback-section').classList.add('hidden');
-        }
+        return widget && widget.shadowRoot && widget.shadowRoot.childElementCount > 0;
       }
       
       document.addEventListener('DOMContentLoaded', function() {
@@ -440,12 +434,12 @@
         script.async = true;
         document.head.appendChild(script);
         
-        var checks = 0;
-        var interval = setInterval(function() {
-          checks++;
-          checkWidgetLoaded();
-          if (checks > 30) clearInterval(interval);
-        }, 500);
+        // Show fallback only if widget fails to load after 15s
+        setTimeout(function() {
+          if (!checkWidgetLoaded()) {
+            document.getElementById('fallback-section').classList.add('visible');
+          }
+        }, 15000);
       });
     </script>
   </body>
