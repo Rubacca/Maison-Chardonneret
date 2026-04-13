@@ -1,34 +1,81 @@
 
 
-## Plan: Verbeter design IntroSection
+## Plan: Boekingspagina design matchen met Commandeurshuisje referentie
 
-### Problemen in huidige layout (zie screenshot)
+### Analyse van de referentie (commandeurshuisje.nl/reserveren/...)
 
-1. **Statistieken staan los en ongestructureerd** -- de 4 stats (Gasten, Slaapkamers, Badkamer, Toiletten) staan in een platte `flex-wrap` zonder visuele groepering, waardoor ze er rommelig uitzien
-2. **Subtekst bij Slaapkamers is te lang** voor de beschikbare ruimte, waardoor het visueel uit balans raakt met de andere kolommen
-3. **Geen visuele scheiding** tussen de tekst-content en de stats -- alles vloeit samen
-4. **Stats hebben geen achtergrond** -- ze zweven los op de pagina
+Uit de screenshots blijkt dat de Commandeurshuisje-pagina deze structuur heeft:
 
-### Wijzigingen in `src/components/sections/IntroSection.tsx`
+```text
++--------------------------------------------------+
+| [hamburger]    Commandeurshuisje     NL/DE  BOEK  |  <- minimale header
++--------------------------------------------------+
+|                                                    |
+|              R E S E R V E R E N                   |  <- kleine uppercase tagline
+|           Boek uw verblijf                         |  <- grote serif titel
+|  Kies uw gewenste periode en rond uw boeking...    |  <- subtiel subtekst
+|                                                    |
++--------------------------------------------------+
+|                                                    |
+|  [Recranet widget - volledige breedte]             |
+|  Details | Voorzieningen | Beschikbaarheid | ...   |
+|  [foto grid]                                       |
+|  [kalenders + booking sidebar rechts]              |
+|                                                    |
++--------------------------------------------------+
+| Online reserveringssysteem: Recranet               |
++--------------------------------------------------+
+|                   FOOTER                           |
++--------------------------------------------------+
+```
 
-**1. Stats in een grid met achtergrond**
-Vervang de `flex-wrap` door een `grid grid-cols-2 sm:grid-cols-4` layout met een subtiele achtergrondkleur (`bg-brand-cream/50`) en padding, zodat de statistieken als een visueel blok gepresenteerd worden.
+### Verschilpunten met huidige pagina
 
-**2. Elke stat als een card-achtig element**
-Elke statistiek krijgt een consistente hoogte met de waarde groot bovenaan, label eronder, en optionele subtekst. Verticale dividers worden vervangen door een grid-gap.
+1. **Fallback-sectie en help-tekst** staan prominent zichtbaar, zelfs als de widget geladen is -- dit maakt de pagina rommelig
+2. **Hero subtitle** is te specifiek ("Maison Chardonneret Elegant . Orchimont, Ardennen") vs referentie die een call-to-action gebruikt ("Kies uw gewenste periode en rond uw boeking direct af")
+3. **Meta description** vermeldt nog "10 personen" -- moet "4 personen" zijn
+4. **Widget container** heeft mogelijk padding/margin die de layout beperkt
+5. **Geen border-bottom** onder de hero in referentie -- het vloeit clean over naar de widget
 
-**3. Meer whitespace tussen beschrijving en stats**
-Vergroot de `pt-4` naar `pt-8` voor betere visuele scheiding.
+### Wijzigingen in `public/boeken/index.html`
 
-**4. Verfijnde typografie voor stats**
-- Waarden: `text-3xl md:text-4xl font-serif` (groter, meer impact)
-- Labels: `text-sm font-medium` (iets zwaarder voor leesbaarheid)
-- Subtekst: `text-xs text-brand-sage italic` (eleganter)
+**1. Meta description updaten**
+- Van "10 personen" naar "4 personen"
 
-**5. Subtiele border-left accent op elke stat**
-Voeg een `border-l-2 border-brand-sage/30 pl-4` toe aan elke stat-cel (behalve de eerste in elke rij) voor visuele structuur zonder zware dividers.
+**2. Hero subtekst aanpassen**
+- NL: "Kies uw gewenste periode en rond uw boeking direct af."
+- FR: "Choisissez votre période et finalisez votre réservation."
+- Dit matcht de referentie-stijl (call-to-action i.p.v. locatie-info)
 
-### Resultaat
+**3. Hero border-bottom verwijderen**
+- `border-bottom: 1px solid rgba(0,0,0,0.05)` weghalen voor cleaner overgang
 
-De stats worden gepresenteerd als een gestructureerd, visueel aantrekkelijk blok dat duidelijk gescheiden is van de beschrijvingstekst, met betere hiërarchie en leesbaarheid.
+**4. Fallback-sectie verbeteren**
+- Standaard `display: none` maken en alleen tonen als widget na 15s niet geladen is
+- Hierdoor geen visuele rommel als widget wel laadt
+
+**5. Help-tekst verwijderen of minimaliseren**
+- De "Vragen over uw reservering?" tekst verwijderen -- de referentie toont dit niet
+
+**6. Widget section styling**
+- Geen extra padding rond de widget-container
+- Widget krijgt `max-width: 1200px; margin: 0 auto` voor consistente centering
+
+**7. Footer description updaten**
+- "voor het hele gezin" -> "voor 4 personen" (consistent met rest van site)
+
+### Samenvatting
+
+| Onderdeel | Actie |
+|-----------|-------|
+| Meta description | "10 personen" -> "4 personen" |
+| Hero subtitle | Locatie-info -> call-to-action tekst |
+| Hero border | Verwijderen |
+| Fallback sectie | Standaard verborgen, alleen na timeout tonen |
+| Help tekst | Verwijderen |
+| Widget container | Clean centering, geen extra padding |
+| Footer | Tekst aanpassen naar 4 personen |
+| Translations object | NL + FR updaten |
+
+Eén bestand: `public/boeken/index.html`
 
