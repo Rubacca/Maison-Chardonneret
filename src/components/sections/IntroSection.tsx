@@ -29,22 +29,29 @@ export const IntroSection = () => {
               <span className="italic text-brand-sage">{getT("intro", "title_line2", "ontsnapping")}</span>
             </h2>
             <p className="font-sans text-base sm:text-lg text-muted-foreground leading-relaxed max-w-lg">
-              {getT("intro", "description", "Ontdek onze gîte voor 10 personen, ingericht in stijlvolle brocante sfeer in het pittoreske Orchimont. Waar tijd even stilstaat en de natuur je omringt.")}
+              {getT("intro", "description", "Ontdek onze charmante gîte voor 4 personen, ingericht in stijlvolle brocante sfeer in het pittoreske Orchimont. Met een optionele slaapbank in de tussenkamer is er ruimte voor maximaal 6 gasten — in overleg.")}
             </p>
             <div className="flex flex-wrap gap-6 sm:gap-8 pt-4">
               <div className="space-y-1">
-                <span className="font-serif text-2xl sm:text-3xl text-foreground">10</span>
-                <p className="text-xs sm:text-sm text-muted-foreground">{getT("intro", "stat_persons_label", "Personen")}</p>
+                <span className="font-serif text-2xl sm:text-3xl text-foreground">{getT("intro", "stat_persons", "4")}</span>
+                <p className="text-xs sm:text-sm text-muted-foreground">{getT("intro", "stat_persons_label", "Gasten")}</p>
+                <p className="text-[10px] sm:text-xs text-brand-sage">{getT("intro", "stat_persons_sub", "+2 op aanvraag")}</p>
               </div>
               <div className="w-px bg-border hidden sm:block" />
               <div className="space-y-1">
-                <span className="font-serif text-2xl sm:text-3xl text-foreground">5</span>
+                <span className="font-serif text-2xl sm:text-3xl text-foreground">{getT("intro", "stat_bedrooms", "2")}</span>
                 <p className="text-xs sm:text-sm text-muted-foreground">{getT("intro", "stat_bedrooms_label", "Slaapkamers")}</p>
+                <p className="text-[10px] sm:text-xs text-brand-sage">{getT("intro", "stat_bedrooms_sub", "+1 tussenkamer")}</p>
               </div>
               <div className="w-px bg-border hidden sm:block" />
               <div className="space-y-1">
-                <span className="font-serif text-2xl sm:text-3xl text-foreground">3</span>
-                <p className="text-xs sm:text-sm text-muted-foreground">{getT("intro", "stat_bathrooms_label", "Badkamers")}</p>
+                <span className="font-serif text-2xl sm:text-3xl text-foreground">{getT("intro", "stat_bathrooms", "1")}</span>
+                <p className="text-xs sm:text-sm text-muted-foreground">{getT("intro", "stat_bathrooms_label", "Badkamer")}</p>
+              </div>
+              <div className="w-px bg-border hidden sm:block" />
+              <div className="space-y-1">
+                <span className="font-serif text-2xl sm:text-3xl text-foreground">{getT("intro", "stat_toilet", "1")}</span>
+                <p className="text-xs sm:text-sm text-muted-foreground">{getT("intro", "stat_toilet_label", "Extra toilet")}</p>
               </div>
             </div>
           </motion.div>
