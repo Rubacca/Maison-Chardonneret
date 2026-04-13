@@ -1,35 +1,34 @@
 
 
-## Plan: Intro-sectie aanpassen naar correcte woninggegevens
+## Plan: Verbeter design IntroSection
 
-### Wijzigingen
+### Problemen in huidige layout (zie screenshot)
 
-**1. Component: `src/components/sections/IntroSection.tsx`**
+1. **Statistieken staan los en ongestructureerd** -- de 4 stats (Gasten, Slaapkamers, Badkamer, Toiletten) staan in een platte `flex-wrap` zonder visuele groepering, waardoor ze er rommelig uitzien
+2. **Subtekst bij Slaapkamers is te lang** voor de beschikbare ruimte, waardoor het visueel uit balans raakt met de andere kolommen
+3. **Geen visuele scheiding** tussen de tekst-content en de stats -- alles vloeit samen
+4. **Stats hebben geen achtergrond** -- ze zweven los op de pagina
 
-Statistieken aanpassen:
-- **4** Gasten (+2 op aanvraag)
-- **2** Slaapkamers (+1 tussenkamer)
-- **1** Badkamer + 1 extra toilet
+### Wijzigingen in `src/components/sections/IntroSection.tsx`
 
-Fallback-beschrijving:
-- NL: "Ontdek onze charmante gîte voor 4 personen, ingericht in stijlvolle brocante sfeer in het pittoreske Orchimont. Met een optionele slaapbank in de tussenkamer is er ruimte voor maximaal 6 gasten — in overleg."
-- FR: "Découvrez notre charmant gîte pour 4 personnes, aménagé dans un style brocante élégant à Orchimont. Un canapé-lit dans la chambre intermédiaire permet d'accueillir jusqu'à 6 personnes — sur demande."
+**1. Stats in een grid met achtergrond**
+Vervang de `flex-wrap` door een `grid grid-cols-2 sm:grid-cols-4` layout met een subtiele achtergrondkleur (`bg-brand-cream/50`) en padding, zodat de statistieken als een visueel blok gepresenteerd worden.
 
-Statistieken layout wordt 4 kolommen:
-| 4 Gasten | 2 Slaapkamers | 1 Badkamer | 1 Extra toilet |
-Met subtekst "+2 op aanvraag" onder gasten en "+1 tussenkamer" onder slaapkamers.
+**2. Elke stat als een card-achtig element**
+Elke statistiek krijgt een consistente hoogte met de waarde groot bovenaan, label eronder, en optionele subtekst. Verticale dividers worden vervangen door een grid-gap.
 
-**2. Database: `site_content` tabel updaten**
+**3. Meer whitespace tussen beschrijving en stats**
+Vergroot de `pt-4` naar `pt-8` voor betere visuele scheiding.
 
-Bestaande intro-rijen bijwerken via insert tool (UPDATE):
-- `stat_persons` → "4"
-- `stat_persons_label` → NL: "Gasten", FR: "Personnes"  
-- `stat_persons_sub` → NL: "+2 op aanvraag", FR: "+2 sur demande" (nieuw)
-- `stat_bedrooms` → "2"
-- `stat_bedrooms_label` → NL: "Slaapkamers", FR: "Chambres"
-- `stat_bedrooms_sub` → NL: "+1 tussenkamer", FR: "+1 chambre intermédiaire" (nieuw)
-- `stat_bathrooms` → "1"
-- `stat_bathrooms_label` → NL: "Badkamer", FR: "Salle de bain"
-- Nieuw: `stat_toilet` → "1", label NL: "Extra toilet", FR: "Toilette supplémentaire"
-- `description` → nieuwe NL/FR teksten zoals hierboven
+**4. Verfijnde typografie voor stats**
+- Waarden: `text-3xl md:text-4xl font-serif` (groter, meer impact)
+- Labels: `text-sm font-medium` (iets zwaarder voor leesbaarheid)
+- Subtekst: `text-xs text-brand-sage italic` (eleganter)
+
+**5. Subtiele border-left accent op elke stat**
+Voeg een `border-l-2 border-brand-sage/30 pl-4` toe aan elke stat-cel (behalve de eerste in elke rij) voor visuele structuur zonder zware dividers.
+
+### Resultaat
+
+De stats worden gepresenteerd als een gestructureerd, visueel aantrekkelijk blok dat duidelijk gescheiden is van de beschrijvingstekst, met betere hiërarchie en leesbaarheid.
 
