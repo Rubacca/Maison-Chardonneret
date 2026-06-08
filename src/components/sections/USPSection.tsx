@@ -3,8 +3,10 @@ import { Armchair, Leaf, Trees, WifiOff } from "lucide-react";
 import { Container } from "@/components/layout/Container";
 import { useContent } from "@/hooks/useContent";
 import { useLang } from "@/contexts/LangContext";
+import chardonneretAsset from "@/assets/chardonneret.png.asset.json";
 
 const icons = [Armchair, Leaf, Trees, WifiOff];
+
 
 const USPCard = ({ icon: Icon, title, description, index }: {
   icon: typeof Armchair;
@@ -50,9 +52,14 @@ export const USPSection = () => {
   ];
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-muted">
+    <section
+      className="relative py-12 sm:py-16 md:py-20 bg-muted bg-cover bg-center"
+      style={{
+        backgroundImage: `linear-gradient(rgba(232,232,224,0.86), rgba(232,232,224,0.92)), url(${chardonneretAsset.url})`,
+      }}
+    >
       <Container>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
+        <div className="relative grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
           {usps.map((usp, index) => (
             <USPCard key={index} {...usp} index={index} />
           ))}
@@ -61,3 +68,4 @@ export const USPSection = () => {
     </section>
   );
 };
+
