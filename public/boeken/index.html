@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <base href="/boeken/" />
+    
     <title>Reserveren | Maison Chardonneret Elegant</title>
     <meta name="description" content="Boek uw verblijf bij Maison Chardonneret Elegant - een authentieke gîte voor 4 personen in brocante stijl, genesteld in de prachtige Ardennen te Orchimont." />
     
@@ -168,10 +168,11 @@
       }
 
       /* Widget — only CSS custom properties (cross shadow DOM) */
+      recranet-accommodation,
       recranet-accommodations {
         display: block;
         width: 100%;
-        min-height: 400px;
+        min-height: 600px;
         --recranet-primary: #8B9D83;
         --recranet-primary-hover: #7A8C73;
       }
@@ -327,11 +328,11 @@
       </section>
       
       <section id="widget">
-        <recranet-accommodations></recranet-accommodations>
+        <recranet-accommodation accommodation="maison-chardonneret-elegant"></recranet-accommodation>
         
         <div class="fallback-section" id="fallback-section">
           <p class="fallback-text" id="fallback-text">Widget niet zichtbaar? Boek direct via ons reserveringsportaal:</p>
-          <a id="fallback-link" href="https://maison-chardonneret-elegant.recranet.com/nl/accommodations" class="fallback-link" target="_blank" rel="noopener">
+          <a id="fallback-link" href="https://maison-chardonneret-elegant.recranet.com/nl/accommodations/maison-chardonneret-elegant" class="fallback-link" target="_blank" rel="noopener">
             <span id="fallback-btn">Direct boeken →</span>
           </a>
         </div>
@@ -377,7 +378,7 @@
           footerLinkHouse: 'Het Huis',
           footerLinkArea: 'Omgeving',
           footerLinkBook: 'Boeken',
-          portalUrl: 'https://maison-chardonneret-elegant.recranet.com/nl/accommodations'
+          portalUrl: 'https://maison-chardonneret-elegant.recranet.com/nl/accommodations/maison-chardonneret-elegant'
         },
         fr: {
           heroTagline: 'Réservez votre séjour',
@@ -391,7 +392,7 @@
           footerLinkHouse: 'La Maison',
           footerLinkArea: 'Environs',
           footerLinkBook: 'Réserver',
-          portalUrl: 'https://maison-chardonneret-elegant.recranet.com/fr/accommodations'
+          portalUrl: 'https://maison-chardonneret-elegant.recranet.com/fr/accommodations/maison-chardonneret-elegant'
         }
       };
       
