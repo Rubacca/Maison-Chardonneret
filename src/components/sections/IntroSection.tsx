@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import { Container } from "@/components/layout/Container";
 import { useContent } from "@/hooks/useContent";
 import { useLang } from "@/contexts/LangContext";
+import chardonneretAsset from "@/assets/chardonneret.png.asset.json";
+
 
 export const IntroSection = () => {
   const { lang } = useLang();
@@ -31,7 +33,11 @@ export const IntroSection = () => {
             <p className="font-sans text-base sm:text-lg text-muted-foreground leading-relaxed max-w-lg">
               {getT("intro", "description", "Ontdek onze charmante gîte voor 4 personen, ingericht in stijlvolle brocante sfeer in het pittoreske Orchimont. Met een optionele slaapbank in de tussenkamer is er ruimte voor maximaal 6 gasten — in overleg.")}
             </p>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-8 bg-brand-cream/50 rounded-lg p-6">
+            <div
+              className="relative grid grid-cols-2 sm:grid-cols-4 gap-4 pt-8 rounded-lg p-6 overflow-hidden bg-cover bg-center"
+              style={{ backgroundImage: `linear-gradient(rgba(250,248,245,0.88), rgba(250,248,245,0.92)), url(${chardonneretAsset.url})` }}
+            >
+
               <div className="space-y-1">
                 <span className="font-serif text-3xl md:text-4xl text-foreground">{getT("intro", "stat_persons", "4")}</span>
                 <p className="text-sm font-medium text-muted-foreground">{getT("intro", "stat_persons_label", "Gasten")}</p>
