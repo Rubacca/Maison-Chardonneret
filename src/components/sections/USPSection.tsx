@@ -75,15 +75,3 @@ export const USPSection = () => {
   );
 };
 
-
-      <Container>
-        <div className="relative grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
-          {usps.map((usp, index) => (
-            <USPCard key={index} {...usp} index={index} />
-          ))}
-        </div>
-      </Container>
-    </section>
-  );
-};
-
