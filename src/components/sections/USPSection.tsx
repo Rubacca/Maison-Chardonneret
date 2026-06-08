@@ -52,22 +52,25 @@ export const USPSection = () => {
   ];
 
   return (
-    <section className="relative py-12 sm:py-16 md:py-20 bg-muted overflow-hidden">
-      <img
-        src={chardonneretAsset.url}
-        alt=""
-        aria-hidden="true"
-        className="absolute inset-0 w-full h-full object-contain object-center opacity-25 pointer-events-none"
-      />
-      <div className="absolute inset-0 bg-muted/60 pointer-events-none" />
-
-      <Container>
-        <div className="relative grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
-          {usps.map((usp, index) => (
-            <USPCard key={index} {...usp} index={index} />
-          ))}
+    <section className="relative bg-muted overflow-hidden">
+      <div className="relative w-full aspect-[1727/972]">
+        <img
+          src={chardonneretAsset.url}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
+        />
+        <div className="absolute inset-0 bg-muted/55 pointer-events-none" />
+        <div className="absolute inset-0 flex items-center">
+          <Container>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
+              {usps.map((usp, index) => (
+                <USPCard key={index} {...usp} index={index} />
+              ))}
+            </div>
+          </Container>
         </div>
-      </Container>
+      </div>
     </section>
   );
 };
