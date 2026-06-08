@@ -1,81 +1,57 @@
+## Plan: /boeken/ tonen als directe detailpagina van Maison Chardonneret
 
+### Wat er nu fout gaat
 
-## Plan: Boekingspagina design matchen met Commandeurshuisje referentie
+De Recranet widget rendert wel HTML maar zonder zijn eigen styling:
+- Filterknoppen, dropdowns en icons verschijnen kaal
+- De foto van de accommodatie ontbreekt (lege grijze blok)
+- Sorteer- en pagineerknoppen zijn ongestyled
 
-### Analyse van de referentie (commandeurshuisje.nl/reserveren/...)
-
-Uit de screenshots blijkt dat de Commandeurshuisje-pagina deze structuur heeft:
-
-```text
-+--------------------------------------------------+
-| [hamburger]    Commandeurshuisje     NL/DE  BOEK  |  <- minimale header
-+--------------------------------------------------+
-|                                                    |
-|              R E S E R V E R E N                   |  <- kleine uppercase tagline
-|           Boek uw verblijf                         |  <- grote serif titel
-|  Kies uw gewenste periode en rond uw boeking...    |  <- subtiel subtekst
-|                                                    |
-+--------------------------------------------------+
-|                                                    |
-|  [Recranet widget - volledige breedte]             |
-|  Details | Voorzieningen | Beschikbaarheid | ...   |
-|  [foto grid]                                       |
-|  [kalenders + booking sidebar rechts]              |
-|                                                    |
-+--------------------------------------------------+
-| Online reserveringssysteem: Recranet               |
-+--------------------------------------------------+
-|                   FOOTER                           |
-+--------------------------------------------------+
-```
-
-### Verschilpunten met huidige pagina
-
-1. **Fallback-sectie en help-tekst** staan prominent zichtbaar, zelfs als de widget geladen is -- dit maakt de pagina rommelig
-2. **Hero subtitle** is te specifiek ("Maison Chardonneret Elegant . Orchimont, Ardennen") vs referentie die een call-to-action gebruikt ("Kies uw gewenste periode en rond uw boeking direct af")
-3. **Meta description** vermeldt nog "10 personen" -- moet "4 personen" zijn
-4. **Widget container** heeft mogelijk padding/margin die de layout beperkt
-5. **Geen border-bottom** onder de hero in referentie -- het vloeit clean over naar de widget
+Twee waarschijnlijke oorzaken:
+1. **`<base href="/boeken/">` in de `<head>`** breekt de relatieve URL's die de Recranet SDK gebruikt voor zijn CSS, icons en afbeeldingen — alle assets worden onder `/boeken/...` opgevraagd in plaats van de Recranet CDN.
+2. We gebruiken `<recranet-accommodations>` (lijstweergave met zoekfilters) terwijl de referentie-site `commandeurshuisje.nl` de **single-accommodation widget** gebruikt, die direct foto's, tabs (Details / Voorzieningen / Beschikbaarheid) en de boekings-sidebar toont — geen zoekformulier nodig want er is maar één woning.
 
 ### Wijzigingen in `public/boeken/index.html`
 
-**1. Meta description updaten**
-- Van "10 personen" naar "4 personen"
+**1. `<base>`-tag verwijderen**
+Regel 6 (`<base href="/boeken/" />`) eruit. Alle interne links zijn al absoluut (`/`, `/#huis`, etc.), dus dit heeft geen impact behalve dat de widget weer normaal werkt.
 
-**2. Hero subtekst aanpassen**
-- NL: "Kies uw gewenste periode en rond uw boeking direct af."
-- FR: "Choisissez votre période et finalisez votre réservation."
-- Dit matcht de referentie-stijl (call-to-action i.p.v. locatie-info)
+**2. Widget vervangen door single-accommodation element**
+```html
+<!-- nu -->
+<recranet-accommodations></recranet-accommodations>
 
-**3. Hero border-bottom verwijderen**
-- `border-bottom: 1px solid rgba(0,0,0,0.05)` weghalen voor cleaner overgang
+<!-- wordt -->
+<recranet-accommodation accommodation="maison-chardonneret-elegant"></recranet-accommodation>
+```
+De slug `maison-chardonneret-elegant` halen we uit het bestaande portaal-URL (`maison-chardonneret-elegant.recranet.com`). Als de Recranet SDK een numeriek accommodation-ID verwacht in plaats van een slug, halen we dat ID uit het Recranet beheerpaneel (organisatie 1640) en passen we het attribuut aan.
 
-**4. Fallback-sectie verbeteren**
-- Standaard `display: none` maken en alleen tonen als widget na 15s niet geladen is
-- Hierdoor geen visuele rommel als widget wel laadt
+**3. CSS custom properties uitbreiden**
+De selector verbreden zodat zowel de oude als de nieuwe widget de juiste accent-kleur krijgen:
+```css
+recranet-accommodation,
+recranet-accommodations {
+  display: block;
+  width: 100%;
+  min-height: 600px;
+  --recranet-primary: #8B9D83;
+  --recranet-primary-hover: #7A8C73;
+}
+```
 
-**5. Help-tekst verwijderen of minimaliseren**
-- De "Vragen over uw reservering?" tekst verwijderen -- de referentie toont dit niet
+**4. Fallback-link laten wijzen naar de juiste detail-URL**
+```
+https://maison-chardonneret-elegant.recranet.com/nl/accommodations/maison-chardonneret-elegant
+```
+(en `/fr/...` voor de Franse versie) — zodat de noodknop altijd werkt.
 
-**6. Widget section styling**
-- Geen extra padding rond de widget-container
-- Widget krijgt `max-width: 1200px; margin: 0 auto` voor consistente centering
+**5. Hero, header en footer blijven exact zoals nu** — die zijn al goed.
 
-**7. Footer description updaten**
-- "voor het hele gezin" -> "voor 4 personen" (consistent met rest van site)
+### Verificatie
 
-### Samenvatting
+Na de wijziging:
+- `/boeken/` openen → widget moet foto's, tabs en boekings-sidebar tonen, identiek qua opbouw aan `commandeurshuisje.nl/reserveren/...`
+- Check console op 404's voor assets (mag niet meer voorkomen na verwijderen `<base>`)
+- Test taalwissel NL ↔ FR via de knoppen rechtsboven
 
-| Onderdeel | Actie |
-|-----------|-------|
-| Meta description | "10 personen" -> "4 personen" |
-| Hero subtitle | Locatie-info -> call-to-action tekst |
-| Hero border | Verwijderen |
-| Fallback sectie | Standaard verborgen, alleen na timeout tonen |
-| Help tekst | Verwijderen |
-| Widget container | Clean centering, geen extra padding |
-| Footer | Tekst aanpassen naar 4 personen |
-| Translations object | NL + FR updaten |
-
-Eén bestand: `public/boeken/index.html`
-
+Eén bestand aangepast: `public/boeken/index.html`. Geen backend-wijzigingen.
