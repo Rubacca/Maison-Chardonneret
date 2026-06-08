@@ -52,12 +52,15 @@ export const USPSection = () => {
   ];
 
   return (
-    <section
-      className="relative py-12 sm:py-16 md:py-20 bg-muted bg-cover bg-center"
-      style={{
-        backgroundImage: `linear-gradient(rgba(232,232,224,0.86), rgba(232,232,224,0.92)), url(${chardonneretAsset.url})`,
-      }}
-    >
+    <section className="relative py-12 sm:py-16 md:py-20 bg-muted overflow-hidden">
+      <img
+        src={chardonneretAsset.url}
+        alt=""
+        aria-hidden="true"
+        className="absolute inset-0 w-full h-full object-contain object-center opacity-25 pointer-events-none"
+      />
+      <div className="absolute inset-0 bg-muted/60 pointer-events-none" />
+
       <Container>
         <div className="relative grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
           {usps.map((usp, index) => (
