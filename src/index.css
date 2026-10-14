@@ -13,6 +13,9 @@
     --brand-cream: 36 33% 97%;        /* Warm Background #FAF8F5 */
     --brand-sage: 104 12% 56%;        /* Nature Accent #8B9D83 */
     --brand-clay: 25 35% 66%;         /* Warm Earth/Terracotta #C9A588 */
+    --brand-forest: 125 22% 22%;      /* Deep forest green for USP headings */
+    --brand-ivory: 40 45% 97%;        /* Warm ivory panel */
+    --brand-charcoal: 0 0% 18%;       /* Dark charcoal body text */
 
     /* Semantic mapping to brand */
     --background: 36 33% 97%;         /* brand-cream */

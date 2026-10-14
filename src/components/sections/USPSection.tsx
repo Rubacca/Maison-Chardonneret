@@ -15,21 +15,17 @@ const USPCard = ({ icon: Icon, title, description, index }: {
   index: number;
 }) => (
   <motion.div
-    initial={{ opacity: 0, y: 30 }}
+    initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-50px" }}
     transition={{ duration: 0.5, delay: index * 0.1 }}
-    className="text-center p-4 sm:p-6 group"
+    className="px-6 py-6 lg:px-8 lg:py-2"
   >
-    <motion.div
-      whileHover={{ scale: 1.1, rotate: 5 }}
-      transition={{ type: "spring", stiffness: 300 }}
-      className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-brand-sage/10 mb-4 sm:mb-6 group-hover:bg-brand-sage/20 transition-colors"
-    >
-      <Icon className="w-5 h-5 sm:w-7 sm:h-7 text-brand-sage" />
-    </motion.div>
-    <h3 className="font-serif text-lg sm:text-xl text-foreground mb-2 sm:mb-3">{title}</h3>
-    <p className="font-sans text-xs sm:text-sm text-muted-foreground leading-relaxed">{description}</p>
+    <div className="flex items-center gap-3 mb-3">
+      <Icon className="w-6 h-6 shrink-0 text-[hsl(var(--brand-forest))]" strokeWidth={1.75} aria-hidden="true" />
+      <h3 className="font-serif text-[22px] lg:text-[24px] leading-tight text-[hsl(var(--brand-forest))]">{title}</h3>
+    </div>
+    <p className="font-sans text-base lg:text-[17px] leading-relaxed text-[hsl(var(--brand-charcoal))]">{description}</p>
   </motion.div>
 );
 
@@ -44,33 +40,31 @@ export const USPSection = () => {
   const { lang } = useLang();
   const { getT } = useContent(lang);
 
-  const usps = [
-    { icon: icons[0], title: getT("usps", "usp1_title", fallbackUsps[0].title), description: getT("usps", "usp1_description", fallbackUsps[0].description) },
-    { icon: icons[1], title: getT("usps", "usp2_title", fallbackUsps[1].title), description: getT("usps", "usp2_description", fallbackUsps[1].description) },
-    { icon: icons[2], title: getT("usps", "usp3_title", fallbackUsps[2].title), description: getT("usps", "usp3_description", fallbackUsps[2].description) },
-    { icon: icons[3], title: getT("usps", "usp4_title", fallbackUsps[3].title), description: getT("usps", "usp4_description", fallbackUsps[3].description) },
-  ];
+  const usps = [1, 2, 3, 4].map((n, i) => ({
+    icon: icons[i],
+    title: getT("usps", `usp${n}_title`, fallbackUsps[i].title),
+    description: getT("usps", `usp${n}_description`, fallbackUsps[i].description),
+  }));
 
   return (
-    <section className="relative bg-muted overflow-hidden">
-      <div className="relative w-full min-h-[560px] md:min-h-0 md:aspect-[1727/972] flex items-center py-16 md:py-0">
+    <section className="relative bg-background pb-12 md:pb-20">
+      <div className="relative w-full h-[300px] sm:h-[420px] md:h-[560px] lg:h-[680px] overflow-hidden">
         <img
           src={chardonneretAsset.url}
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
+          className="absolute inset-0 w-full h-full object-cover object-[50%_35%] pointer-events-none"
         />
-        <div className="absolute inset-0 bg-muted/55 pointer-events-none" />
-        <div className="relative md:absolute md:inset-0 flex items-center w-full">
-          <Container>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
-              {usps.map((usp, index) => (
-                <USPCard key={index} {...usp} index={index} />
-              ))}
-            </div>
-          </Container>
-        </div>
       </div>
+      <Container>
+        <div className="relative mt-6 md:-mt-28 lg:-mt-24 rounded-2xl border border-brand-sage/20 bg-[hsl(var(--brand-ivory)/0.97)] shadow-[0_18px_40px_-18px_hsl(var(--brand-dark)/0.35)] backdrop-blur-sm px-2 py-4 md:p-6 lg:px-6 lg:py-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 divide-y md:divide-y-0 divide-brand-sage/20 [&>*]:border-brand-sage/20 md:[&>*:nth-child(even)]:border-l md:[&>*:nth-child(n+3)]:border-t lg:[&>*:nth-child(n+3)]:border-t-0 lg:[&>*:not(:first-child)]:border-l">
+            {usps.map((usp, index) => (
+              <USPCard key={index} {...usp} index={index} />
+            ))}
+          </div>
+        </div>
+      </Container>
     </section>
   );
 };
