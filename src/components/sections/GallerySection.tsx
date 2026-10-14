@@ -43,7 +43,7 @@ export const GallerySection = () => {
 
   return (
     <section id="galerij" className="py-16 sm:py-24 bg-background">
-      <Container>
+      <Container size="md">
         <div className="text-center mb-10 sm:mb-14">
           <span className="inline-block font-sans text-sm tracking-[0.2em] uppercase text-brand-sage mb-4">{t.label}</span>
           <h2 className="font-serif text-2xl sm:text-3xl md:text-5xl text-foreground">{t.title}</h2>
@@ -59,9 +59,7 @@ export const GallerySection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: (i % 4) * 0.08 }}
-              className={`group relative overflow-hidden rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage ${
-                i === 0 || i === 5 ? "md:col-span-2 md:row-span-2 aspect-square" : "aspect-square"
-              }`}
+              className="group relative overflow-hidden rounded-md aspect-[4/3] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage"
               aria-label={p[lang]}
             >
               <img src={p.src} alt={p[lang]} loading="lazy" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
