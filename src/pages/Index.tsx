@@ -6,6 +6,8 @@ import { IntroSection } from "@/components/sections/IntroSection";
 import { SocialProofSection } from "@/components/sections/SocialProofSection";
 import { FeatureCardsSection } from "@/components/sections/FeatureCardsSection";
 import { USPSection } from "@/components/sections/USPSection";
+import { AmenitiesSection } from "@/components/sections/AmenitiesSection";
+import { GallerySection } from "@/components/sections/GallerySection";
 import { LocationSection } from "@/components/sections/LocationSection";
 import { LangContext } from "@/contexts/LangContext";
 
@@ -28,6 +30,8 @@ const Index = () => {
         <Navbar currentLang={currentLang} onLangChange={setCurrentLang} />
         <HeroSection />
         <IntroSection />
+        <AmenitiesSection />
+        <GallerySection />
         <SocialProofSection />
         <FeatureCardsSection />
         <USPSection />
