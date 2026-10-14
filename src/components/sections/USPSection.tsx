@@ -53,7 +53,7 @@ export const USPSection = () => {
 
   return (
     <section className="relative bg-muted overflow-hidden">
-      <div className="relative w-full aspect-[1727/972]">
+      <div className="relative w-full min-h-[560px] md:min-h-0 md:aspect-[1727/972] flex items-center py-16 md:py-0">
         <img
           src={chardonneretAsset.url}
           alt=""
@@ -61,7 +61,7 @@ export const USPSection = () => {
           className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
         />
         <div className="absolute inset-0 bg-muted/55 pointer-events-none" />
-        <div className="absolute inset-0 flex items-center">
+        <div className="relative md:absolute md:inset-0 flex items-center w-full">
           <Container>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
               {usps.map((usp, index) => (
