@@ -71,7 +71,7 @@ export const Footer = ({ currentLang, onLangChange }: FooterProps) => {
                 <li className="flex items-start gap-3">
                   <MapPin size={16} className="text-brand-sage mt-0.5 flex-shrink-0 sm:w-[18px] sm:h-[18px]" />
                   <span className="font-sans text-xs sm:text-sm text-white/70">
-                    Rue du Chardonneret<br />5560 Orchimont, België
+                    Rue du Château 75<br />5560 Orchimont, België
                   </span>
                 </li>
                 <li className="flex items-center gap-3">

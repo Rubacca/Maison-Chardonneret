@@ -57,7 +57,7 @@ export const LocationSection = () => {
                 <div>
                   <h4 className="font-sans font-medium text-sm sm:text-base text-foreground">{getT("location", "address_label", "Adres")}</h4>
                   <p className="font-sans text-xs sm:text-sm text-muted-foreground whitespace-pre-line">
-                    {getT("location", "address", "Rue du Chardonneret\n5560 Orchimont, België")}
+                    {getT("location", "address", "Rue du Château 75\n5560 Orchimont, België")}
                   </p>
                 </div>
               </div>
